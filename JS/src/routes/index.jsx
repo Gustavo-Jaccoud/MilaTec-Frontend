@@ -9,7 +9,7 @@ const RecoverPassword = lazy(() => import('@/app/(other)/auth/recover-password/p
 const CreatePassword = lazy(() => import('@/app/(other)/auth/create-password/page'));
 const LockScreen = lazy(() => import('@/app/(other)/auth/lock-screen/page'));
 const ConfirmMail = lazy(() => import('@/app/(other)/auth/confirm-mail/page'));
-const LoginPin = lazy(() => import('@/app/(other)/auth/login-pin/page'));
+const LoginCode = lazy(() => import('@/app/(other)/auth/login-code/page'));
 // const TwoFactor = lazy(() => import('@/app/(other)/auth/two-factor/page'))
 // const AccountDeactivation = lazy(() => import('@/app/(other)/auth/account-deactivation/page'))
 
@@ -570,9 +570,9 @@ const authRoutes = [{
   name: 'Confirm Mail',
   element: <ConfirmMail />
 }, {
-  path: '/auth/login-pin',
-  name: 'Login with PIN',
-  element: <LoginPin />
+  path: '/auth/login-code',
+  name: 'Login Verification Code',
+  element: <LoginCode />
 }];
 
 // public routes
