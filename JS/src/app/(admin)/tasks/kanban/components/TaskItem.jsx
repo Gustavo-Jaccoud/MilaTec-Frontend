@@ -1,63 +1,29 @@
-import { CardBody } from 'react-bootstrap';
-import IconifyIcon from '@/components/wrappers/IconifyIcon';
-
-const TaskItem = ({ task: { priority, title, members, description } }) => {
+const TaskItem = ({
+  task: { title, budgetName, budgetType, category, createdAt },
+}) => {
   return (
-    <div className="card">
-      <CardBody className="">
-        <span
-          className={`badge bg-soft-${
-            priority == 'High'
-              ? 'danger'
-              : priority == 'Medium'
-              ? 'warning'
-              : 'success'
-          } text-${
-            priority == 'High'
-              ? 'danger'
-              : priority == 'Medium'
-              ? 'warning'
-              : 'success'
-          } float-end`}
-        >
-          {priority}
-        </span>
+    <div className="project-card-content">
+      <h5 className="project-card-title">{title}</h5>
 
-        <h5 className="mt-0">
-          <a className="text-dark fw-semibold">{title}</a>
-        </h5>
+      <div className="project-card-field">
+        <span className="project-card-label">Orçamentos</span>
+        <span className="project-card-value">{budgetName}</span>
+      </div>
 
-        <div className="form-check float-end ps-0">
-          <input className="form-check-input" type="checkbox" />
-        </div>
+      <div className="project-card-field">
+        <span className="project-card-label">Tipo de orçamento</span>
+        <span className="project-card-value">{budgetType}</span>
+      </div>
 
-        <p>{description}</p>
-        <div className="clearfix" />
+      <div className="project-card-field">
+        <span className="project-card-label">Categoria</span>
+        <span className="project-card-value">{category}</span>
+      </div>
 
-        <div className="row">
-          <div className="col">
-            <p className="fs-13 mt-2 mb-0">
-              <IconifyIcon icon="ri:calendar-event-line" className="me-1" />{' '}
-              {new Date().toLocaleDateString()}
-            </p>
-          </div>
-          <div className="col-auto">
-            <div className="text-end">
-              {members.map((img, idx) => (
-                <a href="javascript:void(0);" className="text-muted" key={idx}>
-                  <img
-                    src={img}
-                    alt="usuário-tarefa"
-                    width={30}
-                    height={30}
-                    className="avatar-sm img-thumbnail rounded-circle"
-                  />
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </CardBody>
+      <div className="project-card-field">
+        <span className="project-card-label">Data de criação</span>
+        <span className="project-card-date">{createdAt}</span>
+      </div>
     </div>
   );
 };

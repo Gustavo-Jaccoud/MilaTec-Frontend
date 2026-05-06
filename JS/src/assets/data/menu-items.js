@@ -1,3 +1,20 @@
+export const FUNNEL_MENU_ITEMS = [{
+  key: 'funil-obras',
+  label: 'Funil de Obras',
+  icon: 'tabler:building-factory-2',
+  url: '/funil-obras'
+}, {
+  key: 'funil-projetos',
+  label: 'Funil de Projetos',
+  icon: 'tabler:building-warehouse',
+  url: '/funil-projetos'
+}, {
+  key: 'programacao-entregas',
+  label: 'Programação de Entregas',
+  icon: 'tabler:truck-delivery',
+  url: '/programacao-entregas'
+}];
+
 export const MENU_ITEMS = [{
   key: 'dashboard',
   label: 'Gráficos',
@@ -686,7 +703,6 @@ export const MENU_ITEMS = [{
 //     },
 //   ]
 // },
-
 {
   key: 'multi-level',
   label: 'Multi Level',

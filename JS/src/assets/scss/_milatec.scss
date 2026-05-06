@@ -1,0 +1,84 @@
+.milatec-sidebar {
+  background: #fff;
+  border-right: 1px solid #f1f3fa;
+  box-shadow: 0 2px 10px rgba(32, 50, 76, 0.08);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  .logo {
+    display: flex;
+    justify-content: center;
+    padding: 22px 18px 12px;
+  }
+
+  .logo .logo-lg img {
+    width: 154px !important;
+    height: auto !important;
+    object-fit: contain;
+  }
+
+  .sidenav-toggle-button,
+  .button-sm-hover {
+    display: none;
+  }
+}
+
+.milatec-sidebar-scroll {
+  flex: 1;
+  padding: 18px 14px 20px;
+}
+
+.milatec-side-nav {
+  .side-nav-item {
+    margin-bottom: 8px;
+  }
+
+  .side-nav-link {
+    align-items: center;
+    border-radius: 10px;
+    color: #8b929e;
+    display: flex;
+    font-size: 13px;
+    font-weight: 600;
+    gap: 10px;
+    letter-spacing: 0.03em;
+    min-height: 42px;
+    padding: 10px 12px !important;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+  }
+
+  .side-nav-link .menu-icon {
+    color: #00c853;
+    display: inline-flex;
+    font-size: 20px;
+    min-width: 20px;
+  }
+
+  .side-nav-link .menu-text {
+    color: inherit;
+    line-height: 1.1;
+    white-space: normal;
+  }
+
+  .side-nav-item.active .side-nav-link,
+  .side-nav-link:hover {
+    background-color: #f7f9fc;
+    color: #5b6472;
+  }
+}
+
+.milatec-sidebar-user-avatar {
+  align-items: center;
+  background: #ff6b6b;
+  border-radius: 50%;
+  color: #fff;
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 700;
+  height: 26px;
+  justify-content: center;
+  margin: 0 0 16px 12px;
+  width: 26px;
+}

@@ -16,7 +16,6 @@ const MenuItemWithChildren = ({
 }) => {
   const [open, setOpen] = useState(activeMenuItems.includes(item.key));
   const level1 = level === 1;
-  console.log('open', open);
   useEffect(() => {
     setOpen(activeMenuItems.includes(item.key));
   }, [activeMenuItems, item]);
@@ -81,13 +80,10 @@ const MenuItemLink = ({
   className
 }) => {
   const {
-    toggleBackdrop,
     mainMenu
   } = useLayoutContext();
   const ToggleMenu = () => {
-    if (mainMenu.size == 'full') {
-      toggleBackdrop();
-    }
+    if (mainMenu.size !== 'default') return;
   };
   return <Link to={item.url ?? ''} onClick={ToggleMenu} target={item.target} className={clsx(className, {
     disabled: item.isDisabled
@@ -162,7 +158,7 @@ const AppMenu = ({
   useEffect(() => {
     if (menuItems && menuItems.length > 0) activeMenu();
   }, [activeMenu, menuItems]);
-  return <ul className="side-nav">
+  return <ul className="side-nav milatec-side-nav">
       {(menuItems || []).map((item, idx) => {
       return <Fragment key={item.key + idx}>
             {item.isTitle ? <li className={clsx('side-nav-title', {

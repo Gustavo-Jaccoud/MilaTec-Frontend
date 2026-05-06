@@ -159,7 +159,7 @@ const Detached = lazy(() => import('@/app/(other)/layouts/detached/page'));
 const initialRoutes = [{
   path: '/',
   name: 'root',
-  element: <Navigate to="/dashboard" />
+  element: <Navigate to="/funil-projetos" />
 }];
 
 // dashboards
@@ -191,6 +191,18 @@ const appsRoutes = [{
 }, {
   path: '/tasks/kanban',
   name: 'Kanban',
+  element: <Navigate to="/funil-projetos" />
+}, {
+  path: '/funil-projetos',
+  name: 'Funil Projetos',
+  element: <Kanban />
+}, {
+  path: '/funil-obras',
+  name: 'Funil Obras',
+  element: <Kanban />
+}, {
+  path: '/programacao-entregas',
+  name: 'Programação de Entregas',
   element: <Kanban />
 }, {
   path: '/tasks/view-details',

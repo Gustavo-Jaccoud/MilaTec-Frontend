@@ -2,54 +2,139 @@
 // kanbanboard.scss
 //
 
-.kanban-board {
-    display: flex;
-    overflow-x: auto;
-
-    .kanban-board-item {
-        max-width: 350px;
-        min-width: 350px;
-
-        [data-simplebar] {
-            height: calc(100vh - 370px);
-        }
-    }
+.project-funnel-page {
+    background-color: #f6f8fb;
+    border-radius: 22px;
+    padding: 1.5rem;
 }
 
-.tasklist {
-    min-height: 40px;
+.project-funnel-header {
+    margin-bottom: 1rem;
+}
+
+.project-funnel-title {
+    margin: 0;
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+.project-funnel-subtitle {
+    margin: 0.25rem 0 0;
+    color: #7e8696;
+    font-size: 0.95rem;
+}
+
+.project-funnel-filters {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.2rem;
+}
+
+.project-funnel-filter-pill {
+    border: 1px solid #e4e7ec;
+    background-color: #ffffff;
+    color: #3f4654;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.kanban-board.project-funnel-board {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.95rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 0.75rem;
+}
+
+.project-stage-column {
+    flex: 0 0 250px;
+    min-width: 250px;
+    max-width: 250px;
+}
+
+.project-stage-header {
+    margin-bottom: 0.65rem;
+}
+
+.project-stage-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    border-radius: 999px;
+    padding: 0.2rem 0.75rem;
+    color: #fff;
+    font-size: 0.76rem;
+    font-weight: 700;
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(2, 6, 23, 0.2);
+}
+
+.project-stage-pill-default {
+    background-color: #002a87;
+}
+
+.project-stage-pill-success {
+    background-color: #07a35a;
+}
+
+.tasklist.project-stage-tasklist {
+    min-height: 340px;
     margin-bottom: 0;
     z-index: 0;
 
     .card {
-        background-color: $card-bg;
-        border: 1px solid var(--#{$prefix}border-color);
-        margin-bottom: 15px;
-        border-radius: 3px;
-        box-shadow: $box-shadow;
-
-        &:last-of-type {
-            margin-bottom: 0;
-        }
-
-        .btn-sm {
-            padding: 2px 8px;
-            font-size: 12px;
-        }
-    }
-
-    .form-check {
-        margin-left: 20px;
-        margin-top: 5px;
-
-        .form-check-input {
-            margin-left: 0;
-        }
+        border: 1px solid #e7ebf0;
+        border-radius: 12px;
+        margin-bottom: 0.7rem;
+        box-shadow: 0 3px 12px rgba(15, 23, 42, 0.08);
+        background-color: #fff;
     }
 }
 
-.task-placeholder {
-    border: 1px dashed var(--#{$prefix}border-color) !important;
-    background-color: var(--#{$prefix}light) !important;
-    padding: 20px;
+.project-card-content {
+    padding: 0.75rem;
+}
+
+.project-card-title {
+    margin: 0 0 0.65rem;
+    color: #1f2937;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.project-card-field {
+    margin-bottom: 0.42rem;
+}
+
+.project-card-label {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: #8a94a6;
+    font-size: 0.65rem;
+    line-height: 1.1;
+}
+
+.project-card-value {
+    display: inline-flex;
+    max-width: 100%;
+    padding: 0.14rem 0.4rem;
+    border-radius: 6px;
+    background-color: #eef1f5;
+    color: #404756;
+    font-size: 0.62rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.project-card-date {
+    color: #667085;
+    font-size: 0.67rem;
+    font-weight: 600;
 }
