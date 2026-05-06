@@ -16,7 +16,7 @@ const TaskItem = ({
       </div>
 
       <div className="project-card-field">
-        <span className="project-card-label">Categoria</span>
+        <span className="project-card-label">Cidade da obra</span>
         <span className="project-card-value">{category}</span>
       </div>
 

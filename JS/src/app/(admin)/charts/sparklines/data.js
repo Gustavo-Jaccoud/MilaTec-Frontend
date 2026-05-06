@@ -490,3 +490,16 @@ export const optsGrafico8 = {
     },
   },
 };
+
+/** Aliases para imports em `SparkChart.jsx` */
+export const chart1Opts = optsGrafico1;
+export const chart2Opts = optsGrafico2;
+export const chart3Opts = optsGrafico3;
+export const chart4Opts = optsGrafico4;
+export const chart5Opts = optsGrafico5;
+export const chart6Opts = optsGrafico6;
+export const chart7Opts = optsGrafico7;
+export const chart8Opts = optsGrafico8;
+export const spark1ChartOpts = optsGraficoSpark1;
+export const spark2ChartOpts = optsGraficoSpark2;
+export const spark3ChartOpts = optsGraficoSpark3;
