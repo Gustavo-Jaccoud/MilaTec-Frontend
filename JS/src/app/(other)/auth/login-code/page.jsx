@@ -178,10 +178,10 @@ const LoginCodePage = () => {
       clearLoginEmail();
 
       if (decoded.role === "admin") {
-        navigate("/admin");
+        navigate(""); //colocar rota quando estiver pronta
         
       }else if (decoded.role === "user") {
-        navigate("/dashboard");
+        navigate(""); //colocar rota quando estiver pronta
      
       }else{
         navigate("/auth/login");
