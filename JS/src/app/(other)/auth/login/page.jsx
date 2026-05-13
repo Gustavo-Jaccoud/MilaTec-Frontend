@@ -31,7 +31,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (authSession.getToken()) {
-      navigate('/dashboard', { replace: true });
+      navigate('/funil-projetos', { replace: true });
     }
   }, [navigate]);
 

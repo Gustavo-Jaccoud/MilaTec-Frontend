@@ -7,7 +7,7 @@ import { RedirectIfAuthenticated, RequireAuth } from './guards';
 
 const Private = () => <div>Conteudo Privado</div>;
 const Login = () => <div>Tela de Login</div>;
-const Dashboard = () => <div>Dashboard</div>;
+const FunilProjetos = () => <div>Funil de Projetos</div>;
 
 const renderRoutes = (initialPath, ui) =>
   render(
@@ -15,7 +15,7 @@ const renderRoutes = (initialPath, ui) =>
       <Routes>
         {ui}
         <Route path="/auth/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/funil-projetos" element={<FunilProjetos />} />
       </Routes>
     </MemoryRouter>,
   );
@@ -79,7 +79,7 @@ describe('RedirectIfAuthenticated', () => {
     expect(screen.getByText('Tela de Login')).toBeInTheDocument();
   });
 
-  it('redirects authenticated users to /dashboard', () => {
+  it('redirects authenticated users to /funil-projetos', () => {
     authSession.setToken('jwt-token');
     renderRoutes(
       '/auth/login',
@@ -93,6 +93,6 @@ describe('RedirectIfAuthenticated', () => {
       />,
     );
 
-    expect(screen.getByText('Dashboard')).toBeInTheDocument();
+    expect(screen.getByText('Funil de Projetos')).toBeInTheDocument();
   });
 });

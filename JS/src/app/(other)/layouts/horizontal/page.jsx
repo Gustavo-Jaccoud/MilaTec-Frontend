@@ -8,7 +8,7 @@ const Horizontal = () => {
   } = useLayoutContext();
   useEffect(() => {
     changeLayoutOrientation('horizontal');
-    navigation('/dashboard');
+    navigation('/funil-projetos');
   }, [navigation]);
   return <></>;
 };

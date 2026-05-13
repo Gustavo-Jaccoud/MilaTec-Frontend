@@ -1,36 +1,40 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
-
-export const MILLIATEC_TOKEN_KEY = 'miliatec_access_token';
+import { authSession } from '@/services/authSession';
 
 const AuthContext = createContext(undefined);
+
+const readTokenFromSession = () => {
+  if (typeof window === 'undefined') return null;
+  const t = authSession.getToken();
+  return t ? t : null;
+};
 
 const useAuth = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) {
-    throw new Error('useAuth só pode ser usado dentro de AuthProvider');
+    throw new Error('useAuth só pode ser usado dentro do AuthProvider');
   }
   return ctx;
 };
 
 const AuthProvider = ({ children }) => {
-  const [accessToken, setAccessTokenState] = useState(() => {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem(MILLIATEC_TOKEN_KEY);
-  });
+  const [accessToken, setAccessTokenState] = useState(readTokenFromSession);
 
   const setAccessToken = useCallback((token) => {
-    setAccessTokenState(token);
-    if (typeof window === 'undefined') return;
-    if (token) {
-      localStorage.setItem(MILLIATEC_TOKEN_KEY, token);
+    const trimmed = token ? String(token).trim() : '';
+    if (trimmed) {
+      authSession.setToken(trimmed);
+      setAccessTokenState(trimmed);
     } else {
-      localStorage.removeItem(MILLIATEC_TOKEN_KEY);
+      authSession.clearToken();
+      setAccessTokenState(null);
     }
   }, []);
 
   const logout = useCallback(() => {
-    setAccessToken(null);
-  }, [setAccessToken]);
+    authSession.clear();
+    setAccessTokenState(null);
+  }, []);
 
   const value = useMemo(
     () => ({

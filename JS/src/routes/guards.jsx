@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { authSession } from '@/services/authSession';
 
 export const REDIRECT_LOGIN_PATH = '/auth/login';
-export const REDIRECT_AUTHENTICATED_PATH = '/dashboard';
+export const REDIRECT_AUTHENTICATED_PATH = '/funil-projetos';
 
 export const RequireAuth = ({ children }) => {
   const location = useLocation();
