@@ -1,4 +1,4 @@
-import logoSm from "@/assets/images/logo-sm.png";
+import { logoMenorOriginal as logoSm } from "@/assets/brandAssets";
 import ComponentContainerCard from "@/components/ComponentContainerCard";
 import useToggle from "@/hooks/useToggle";
 import { useState } from "react";

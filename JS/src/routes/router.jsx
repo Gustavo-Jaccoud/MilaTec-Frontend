@@ -4,14 +4,26 @@ import AdminLayout from '@/layouts/AdminLayout';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import HorizontalLayout from '@/layouts/HorizontalLayout';
 import OtherLayout from '@/layouts/OtherLayout';
+import { RedirectIfAuthenticated, RequireAuth } from '@/routes/guards';
+
+const wrapPublicElement = (route, props) => {
+  const element = <OtherLayout {...props}>{route.element}</OtherLayout>;
+
+  if (route.redirectIfAuthenticated) {
+    return <RedirectIfAuthenticated>{element}</RedirectIfAuthenticated>;
+  }
+
+  return element;
+};
+
 const AppRouter = props => {
   const {
     orientation
   } = useLayoutContext();
   return <Routes>
-      {publicRoutes.map((route, idx) => <Route key={idx + route.name} path={route.path} element={<OtherLayout {...props}>{route.element}</OtherLayout>} />)}
+      {publicRoutes.map((route, idx) => <Route key={idx + route.name} path={route.path} element={wrapPublicElement(route, props)} />)}
 
-      {(appRoutes || []).map((route, idx) => <Route key={idx + route.name} path={route.path} element={orientation == 'vertical' ? <AdminLayout {...props}>{route.element}</AdminLayout> : <HorizontalLayout {...props}>{route.element}</HorizontalLayout>} />)}
+      {(appRoutes || []).map((route, idx) => <Route key={idx + route.name} path={route.path} element={<RequireAuth>{orientation == 'vertical' ? <AdminLayout {...props}>{route.element}</AdminLayout> : <HorizontalLayout {...props}>{route.element}</HorizontalLayout>}</RequireAuth>} />)}
     </Routes>;
 };
 export default AppRouter;

@@ -26,7 +26,7 @@ const dadosSparkline = [
   47, 45, 54, 38, 56, 24, 65, 31, 37, 39, 62, 51, 35, 41, 35, 27, 93, 53, 61,
   27, 54, 43, 19, 46,
 ];
-export const optsGraficoSpark1 = {
+export const spark1ChartOpts = {
   chart: {
     type: 'area',
     height: 160,
@@ -66,7 +66,7 @@ export const optsGraficoSpark1 = {
     },
   },
 };
-export const optsGraficoSpark2 = {
+export const spark2ChartOpts = {
   chart: {
     type: 'area',
     height: 160,
@@ -106,7 +106,7 @@ export const optsGraficoSpark2 = {
     },
   },
 };
-export const optsGraficoSpark3 = {
+export const spark3ChartOpts = {
   chart: {
     type: 'area',
     height: 160,
@@ -152,7 +152,7 @@ export const optsGraficoSpark3 = {
   },
 };
 
-export const optsGrafico1 = {
+export const chart1Opts = {
   chart: {
     type: 'line',
     width: 140,
@@ -187,7 +187,7 @@ export const optsGrafico1 = {
     },
   },
 };
-export const optsGrafico5 = {
+export const chart5Opts = {
   chart: {
     type: 'bar',
     width: 100,
@@ -232,7 +232,7 @@ export const optsGrafico5 = {
     },
   },
 };
-export const optsGrafico2 = {
+export const chart2Opts = {
   chart: {
     type: 'line',
     width: 140,
@@ -273,7 +273,7 @@ export const optsGrafico2 = {
     },
   },
 };
-export const optsGrafico6 = {
+export const chart6Opts = {
   chart: {
     type: 'bar',
     width: 100,
@@ -318,7 +318,7 @@ export const optsGrafico6 = {
     },
   },
 };
-export const optsGrafico3 = {
+export const chart3Opts = {
   chart: {
     type: 'line',
     width: 140,
@@ -359,7 +359,7 @@ export const optsGrafico3 = {
     },
   },
 };
-export const optsGrafico7 = {
+export const chart7Opts = {
   chart: {
     type: 'bar',
     width: 100,
@@ -404,7 +404,7 @@ export const optsGrafico7 = {
     },
   },
 };
-export const optsGrafico4 = {
+export const chart4Opts = {
   chart: {
     type: 'line',
     width: 140,
@@ -445,7 +445,7 @@ export const optsGrafico4 = {
     },
   },
 };
-export const optsGrafico8 = {
+export const chart8Opts = {
   chart: {
     type: 'bar',
     width: 100,

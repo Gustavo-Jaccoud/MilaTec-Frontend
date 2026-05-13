@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="page-container">
         <Row>
           <Col md={6} className="text-center text-md-start">
-           {currentYear} © Fundação de Saúde Parreiras Horta
+           {currentYear} © Desenvolvido por Residência de Software IV - Squad 10
           </Col>
           
         </Row>

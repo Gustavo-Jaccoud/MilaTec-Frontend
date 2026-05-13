@@ -218,6 +218,7 @@ html[data-sidenav-size="condensed"]:not([data-layout="topnav"]) {
             z-index: 1;
             background: $menu-bg;
             border-radius: 4px;
+            padding: 0 14px;
 
             span.logo-lg {
                 display: none;
@@ -453,6 +454,8 @@ html[data-sidenav-size="sm-hover"]:not([data-layout="topnav"]) {
             .logo-lg {
                 display: none;
             }
+
+            padding: 0 14px;
         }
 
         .side-nav-item {

@@ -1,11 +1,11 @@
-import { Helmet } from 'react-helmet';
-const PageBreadcrumb = ({
-  title
-}) => {
-  return <>
-			<Helmet>
-				<title>{title} | FSPH - Fundação de Saúde Parreiras Horta</title>
-			</Helmet>
-		</>;
+import { useEffect } from 'react';
+
+const PageBreadcrumb = ({ title }) => {
+  useEffect(() => {
+    document.title = `${title} | FSPH - Desenvolvido por Residência de Software IV - Squad 10`;
+  }, [title]);
+
+  return null;
 };
+
 export default PageBreadcrumb;

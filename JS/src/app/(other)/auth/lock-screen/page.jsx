@@ -1,5 +1,4 @@
-import logoDark from '@/assets/images/logo-dark.png';
-import logo from '@/assets/images/logo.png';
+import { logoOriginal as logo, logoOriginal as logoDark } from '@/assets/brandAssets';
 import avatar1 from '@/assets/images/users/avatar-1.jpg';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import { currentYear } from '@/context/constants';
@@ -40,7 +39,7 @@ const LockScreenPage = () => {
               </p>
             </Card>
             <p className="mt-3 text-center mb-0">
-             {currentYear} © Fundação de Saúde Parreiras Horta
+             {currentYear} © Desenvolvido por Residência de Software IV - Squad 10
             </p>
           </Col>
         </Row>
