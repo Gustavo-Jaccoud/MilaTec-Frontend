@@ -4,57 +4,67 @@ import logo from '@/assets/images/logo-milatec.png';
 import { Card, Col, Form, Row } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import {useNavigate} from 'react-router-dom';
-import { currentYear } from '@/context/constants';
 import { useState } from 'react';
-
-
-
+import { setLoginEmail } from "@/app/services/auth";
 
 const LoginPage = () => {
 
-
   const [email, setEmail] = useState("");
+
+
+  const [loading, setLoading] = useState(false);
+
+  const [error, setError] = useState("");
 
 
   const navigate = useNavigate();
 
 
-  const [loading, setLoading] = useState(false);
-
-
-  const [error, setError] = useState("");
 
 
   const handleAvancar = async (e) => {
   e.preventDefault();
 
 
+
+
   setError("");
 
 
+
+
   if (!email) {
-    setError("Digite um email");
+    setError("Informe os dados corretamente.");
     return;
   }
 
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    setError("Email inválido");
+
+
+  if (!/^[^\s@]+@(?!.*\.\.)[^\s@]+\.[^\s@]+$/.test(email)) {
+    setError("Dados inválidos.");
     return;
   }
+
+
+  const cleanEmail = email.trim().toLowerCase(); 
 
 
   setLoading(true);
 
 
+
+
   try {
     const response = await fetch("", { //colocar depois o endpoint referente do backend dentro das aspas duplas
-      method: "POST", 
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email }), 
+      body: JSON.stringify({ email: cleanEmail }),
     });
+
+
 
 
     let data = {};
@@ -66,16 +76,20 @@ const LoginPage = () => {
 
 
 
-
     if (!response.ok) {
-      setError(data.message || "Erro ao enviar código"); 
+      setError(data.message || "Não foi possível continuar. Tente novamente.");
+      setLoading(false);
       return;
     }
 
 
-    navigate("/auth/login-code", {
-      state: { emailUsuario: email }
-    });
+
+
+    setLoginEmail(cleanEmail);
+
+    navigate("/auth/login-code");
+
+
 
 
     } catch (error) {
@@ -84,6 +98,8 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
+
+
 
 
   return <>
@@ -100,15 +116,17 @@ const LoginPage = () => {
               <h4 className="fw-semibold mb-3 fs-18">ENTRAR</h4>
               <Form onSubmit={handleAvancar} className="text-start mb-3">
                 <div className="mb-3">
-                  <label className="form-label" htmlFor="example-email">Email</label>
-                  <Form.Control type="email" id="example-email" name="example-email" placeholder="Digite seu email" required value={email} onChange={(e) => setEmail(e.target.value)}/>
+                  <label className="form-label" htmlFor="email">Email</label>
+                  <Form.Control type="email" id="email" name="email" placeholder="Digite seu email" required value={email} onChange={(e) => setEmail(e.target.value)}/>
+
+
 
 
                 {error && (
                 <div className="text-danger mb-2">
                 {error}
                 </div>
-                )} 
+                )}
                 </div>
                 <div className="d-grid">
                   <button className="btn btn-primary fw-semibold" type="submit"  disabled={loading} style={{ backgroundColor: '#050960', borderColor: '#050960' }}> {loading ? "Enviando..." : "Avançar"} </button>
@@ -116,9 +134,7 @@ const LoginPage = () => {
               </Form>
              
             </Card>
-            <p className="mt-4 text-center mb-0">
-             {currentYear} © Fundação de Saúde Parreiras Horta
-            </p>
+           
           </Col>
         </Row>
       </div>
@@ -126,7 +142,15 @@ const LoginPage = () => {
 };
 
 
+
+
 export default LoginPage;
+
+
+
+
+
+
 
 
 

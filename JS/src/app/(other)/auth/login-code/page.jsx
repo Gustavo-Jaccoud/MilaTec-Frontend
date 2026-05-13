@@ -1,54 +1,68 @@
+import React from 'react';
 import logoDark from '@/assets/images/logo-milatec.png';
 import logo from '@/assets/images/logo-milatec.png';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
-import { currentYear } from '@/context/constants';
 import { Card, Col, Form, Row } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
-import { setToken } from "@/app/services/auth.js";
+import { jwtDecode } from "jwt-decode";
+import { getLoginEmail, setToken, clearLoginEmail, setUserRole} from "@/app/services/auth";
 
 
 const LoginCodePage = () => {
 
-
-  const navigate = useNavigate(); 
-  const location = useLocation(); 
-  const email = location.state?.emailUsuario; 
-  const [code, setCode] = useState(""); 
+  const navigate = useNavigate();
+  const location = useLocation();
+  const email = getLoginEmail();
+  const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [loadingResend, setLoadingResend] = useState(false);
   const [loadingVerify, setLoadingVerify] = useState(false);
+  const [success, setSuccess] = useState("");
 
-  useEffect(() => { 
+
+
+
+  useEffect(() => {
     if (!email) {
       navigate("/auth/login", { replace: true });
     }
   }, [email, navigate]);
 
 
-  const handleResendCode = async () => { 
-    setError(""); 
-    if (!email) {
-      setError("Sessão inválida. Volte e tente novamente.");
+  const handleResendCode = async () => {
+    setSuccess("");
+    setError("");
+    if (!email) { 
+  navigate("/auth/login", { replace: true });
       return;
     }
     setLoadingResend(true);
     try {
       const response = await fetch("", { //colocar depois o endpoint referente do backend dentro das aspas duplas
         method: "POST",
-        headers: { 
+        headers: {
         "Content-Type": "application/json",
         },
         body: JSON.stringify({ email }),
       });
 
+
+
+
       let data = {};
+
+
+
 
       try {
         data = await response.json();
-      } catch {
+      } catch (e) {
         data = {};
       }
+
+
+
 
       if (!response.ok) {
         setError(data.message || "Erro ao enviar código");
@@ -56,14 +70,17 @@ const LoginCodePage = () => {
       }
 
 
-      setError("Código reenviado com sucesso");
+      setSuccess("Código reenviado com sucesso");
 
 
     } catch (error) {
       setError("Não foi possível reenviar o código");
 
+
+
+
     } finally {
-      setLoadingResend(false); 
+      setLoadingResend(false);
     }
   };
 
@@ -71,28 +88,38 @@ const LoginCodePage = () => {
   const handleVerify = async (e) => {
     e.preventDefault();
 
+
+
+
     setError("");
+    setSuccess("");
 
 
 
-    const codigo = code;
 
     if (!email) {
-      setError("Sessão inválida. Volte e tente novamente.");
+      navigate("/auth/login", { replace: true });
       return;
     }
-    if (!codigo) {
-      setError("Digite o código");
+    if (!code) {
+      setError("Informe o código corretamente.");
+      return;
+    }
+
+
+    if (!/^\d{4}$/.test(code)) {
+      setError("Código inválido.");
       return;
     }
 
 
-    if (!/^\d{6}$/.test(codigo)) {
-      setError("O código deve ter exatamente 6 números");
-      return;
-    }
 
+
+    const cleanCode = code.trim().replace(/\D/g, "").slice(0, 4);
     setLoadingVerify(true);
+
+
+
 
     try {
     const response = await fetch("", { //colocar depois o endpoint referente do backend dentro das aspas duplas
@@ -101,13 +128,17 @@ const LoginCodePage = () => {
     "Content-Type": "application/json",
     },
     body: JSON.stringify({
-    email,
-    code: codigo,
+    email: email,
+    code: cleanCode,
     }),
     });
 
 
+
     let data = {};
+
+
+
 
     try {
       data = await response.json();
@@ -115,32 +146,59 @@ const LoginCodePage = () => {
         data = {};
       }
 
+
+
+
       if (!response.ok) {
         setError(data.message || "Erro na requisição");
         return;
       }
 
+
+
+
       if (!data.token) {
-        setError("Código inválido ou não autorizado");
+        setError("Não foi possível validar o código.");
         return;
       }
 
+
+
+
       setError("");
       setToken(data.token);
+     
+ 
+      const decoded = jwtDecode(data.token);
 
 
-      navigate("/dashboard");
+      setUserRole(decoded.role); 
+
+
+      clearLoginEmail();
+
+      if (decoded.role === "admin") {
+        navigate("/admin");
+        
+      }else if (decoded.role === "user") {
+        navigate("/dashboard");
+     
+      }else{
+        navigate("/auth/login");
+      }
+
+      
 
     } catch (error) {
-      setError("Erro de conexão com o servidor");
+      setError("Erro de conexão. Tente novamente.");
     }finally {
       setLoadingVerify(false);
     }
+
+
   };
 
-  
 
- 
   return (
     <>
       <PageBreadcrumb title="Código de Verificação" />
@@ -149,8 +207,6 @@ const LoginCodePage = () => {
           <Col xxl={3} lg={5} md={6}>
            
             <Card className="overflow-hidden text-center p-xxl-4 p-3 mb-0">
-             
-
 
               <div className="auth-brand d-flex justify-content-center mb-2">
                 <img src={logoDark} alt="logo escuro" style={{ width: '13rem' }} className="logo-dark" />
@@ -162,37 +218,38 @@ const LoginCodePage = () => {
                   Enviamos um código de verificação para: {email}
                 </p>
               )}
-
-
               <Form onSubmit={handleVerify} className="text-start mb-3">
                 <label className="form-label" htmlFor="code">
-                  Digite o código de verificação de 6 Dígitos
+                  Digite o código de verificação de 4 dígitos
                 </label>
                 <div className="d-flex gap-2 mt-1 mb-3">
                   <Form.Control
+         id="code"
                     type="text"
                     placeholder="Digite o código"
-                    maxLength={6}
+                    maxLength={4}
                     value={code}
                     onChange={(e) => {
                       const value = e.target.value;
 
-
-                      
                       if (!/^\d*$/.test(value)) return;
-
-
                       setCode(value);
                       setError("");
+                      setSuccess("");
                     }}
                   />
                 </div>
 
                  {error && (
-    <div className="text-danger mb-2">
-      {error}
-    </div>
-  )}
+                    <div className="text-danger mb-2">
+                      {error}
+                    </div>
+                  )}
+                  {success && (
+                    <div className="text-success mb-2">
+                      {success}
+                    </div>
+                  )}
                 <div className="d-grid">
                   <button className="btn btn-primary fw-semibold" type="submit"  disabled={loadingVerify} style={{ backgroundColor: '#050960', borderColor: '#050960' }}>{loadingVerify ? "Verificando..." : "Avançar"}</button>
                 </div>
@@ -210,9 +267,6 @@ const LoginCodePage = () => {
               </Form>
              
             </Card>
-            <p className="mt-4 text-center mb-0">
-              {currentYear} © Fundação de Saúde Parreiras Horta
-            </p>
           </Col>
         </Row>
       </div>
@@ -222,5 +276,12 @@ const LoginCodePage = () => {
 
 
 
-
 export default LoginCodePage ;
+
+
+
+
+
+
+
+
