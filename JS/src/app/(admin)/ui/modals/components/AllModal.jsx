@@ -1,5 +1,4 @@
-import logoDark from '@/assets/images/logo-dark.png';
-import logo from '@/assets/images/logo.png';
+import { logoOriginal as logo, logoOriginal as logoDark } from '@/assets/brandAssets';
 import ComponentContainerCard from '@/components/ComponentContainerCard';
 import IconifyIcon from '@/components/wrappers/IconifyIcon';
 import useModal from '@/hooks/useModal';

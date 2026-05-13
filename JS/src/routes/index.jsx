@@ -544,7 +544,8 @@ const invoicesRoutes = [{
 const authRoutes = [{
   path: '/auth/login',
   name: 'Login',
-  element: <Login />
+  element: <Login />,
+  redirectIfAuthenticated: true
 }, {
   path: '/auth/register',
   name: 'Register',
@@ -572,7 +573,8 @@ const authRoutes = [{
 }, {
   path: '/auth/login-pin',
   name: 'Login with PIN',
-  element: <LoginPin />
+  element: <LoginPin />,
+  redirectIfAuthenticated: true
 }];
 
 // public routes

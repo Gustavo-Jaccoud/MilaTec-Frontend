@@ -3,8 +3,7 @@ export const currentYear = new Date().getFullYear();
 export const developedByLink = 'https://gustavomaz11.github.io/portifolio/';
 export const developedBy = 'Gustavo Machado Trindade';
 export const contactUs = 'gustavotrindade.dev@gmail.com';
-export const basePath = '/fsph/';
-export const DEFAULT_PAGE_TITLE = 'FSPH - Fundação de Saúde Parreiras Horta';
+export const DEFAULT_PAGE_TITLE = 'Desenvolvido por Residência de Software IV - Squad 10';
 
 // Substitua o valor da URL em env pela URL do seu backend, adicione a URL de origem do servidor
 export const API_BASE_PATH = '';

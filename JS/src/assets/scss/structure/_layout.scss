@@ -29,12 +29,20 @@
 .logo-lg {
     img {
         height: $logo-lg-height;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+        vertical-align: middle;
     }
 }
 
 .logo-sm {
     img {
         height: $logo-sm-height;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+        vertical-align: middle;
     }
 }
 
@@ -62,6 +70,29 @@
 
     .logo-dark {
         display: block;
+    }
+}
+
+.sidenav-menu {
+    .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: $topbar-height;
+        line-height: 1;
+        padding: 0 32px 0 26px;
+
+        .logo-lg img {
+            width: 166px;
+            height: auto;
+            max-height: 38px;
+        }
+
+        .logo-sm img {
+            width: 46px;
+            height: auto;
+            max-height: 24px;
+        }
     }
 }
 

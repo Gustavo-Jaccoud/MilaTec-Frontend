@@ -1,5 +1,4 @@
-import logoDark from '@/assets/images/logo-dark.png';
-import logo from '@/assets/images/logo.png';
+import { logoOriginal as logo, logoOriginal as logoDark } from '@/assets/brandAssets';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import IconifyIcon from '@/components/wrappers/IconifyIcon';
 import { currentYear } from '@/context/constants';
@@ -31,7 +30,7 @@ const Error400Page = () => {
               />
             </Link>
             <p className="fw-semibold mb-4 text-center text-muted fs-15">
-              Painel de Administração da Fundação de Saúde Parreiras Horta
+              Painel de Administração da Desenvolvido por Residência de Software IV - Squad 10
             </p>
             <Card className="overflow-hidden text-center p-xxl-4 p-3 mb-0">
               <div className="text-center">
@@ -54,7 +53,7 @@ const Error400Page = () => {
               </div>
             </Card>
             <p className="mt-4 text-center mb-0">
-              {currentYear} © Fundação de Saúde Parreiras Horta
+              {currentYear} © Desenvolvido por Residência de Software IV - Squad 10
             </p>
           </Col>
         </Row>

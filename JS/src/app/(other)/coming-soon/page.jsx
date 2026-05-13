@@ -1,6 +1,5 @@
 import React from 'react';
-import logoDark from '@/assets/images/logo-dark.png';
-import logo from '@/assets/images/logo.png';
+import { logoOriginal as logo, logoOriginal as logoDark } from '@/assets/brandAssets';
 import Timer from './component/Timer';
 import { Card, Col, Row } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
@@ -39,7 +38,7 @@ const ComingSoonPage = () => {
               </div>
               <Timer />
               <p className="mt-3 mb-0">
-                {currentYear} © Fundação de Saúde Parreiras Horta
+                {currentYear} © Desenvolvido por Residência de Software IV - Squad 10
               </p>
             </Card>
           </Col>

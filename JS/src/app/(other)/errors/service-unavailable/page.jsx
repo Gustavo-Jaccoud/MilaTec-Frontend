@@ -1,5 +1,4 @@
-import logoDark from '@/assets/images/logo-dark.png';
-import logo from '@/assets/images/logo.png';
+import { logoOriginal as logo, logoOriginal as logoDark } from '@/assets/brandAssets';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import IconifyIcon from '@/components/wrappers/IconifyIcon';
 import { currentYear } from '@/context/constants';
@@ -51,7 +50,7 @@ const ServiceUnavailablePage = () => {
               </div>
             </Card>
             <p className="mt-4 text-center mb-0">
-              {currentYear} © Fundação de Saúde Parreiras Horta
+              {currentYear} © Desenvolvido por Residência de Software IV - Squad 10
             </p>
           </Col>
         </Row>

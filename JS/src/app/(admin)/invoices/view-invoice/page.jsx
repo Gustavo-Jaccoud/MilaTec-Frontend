@@ -1,5 +1,5 @@
 import React from 'react';
-import logoDark from '@/assets/images/logo-dark.png';
+import { logoOriginal as logoDark } from '@/assets/brandAssets';
 import qrCode from '@/assets/images/png/qr-code.png';
 import { invoiceProductData } from './data';
 import IconifyIcon from '@/components/wrappers/IconifyIcon';

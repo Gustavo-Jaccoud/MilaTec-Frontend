@@ -1,4 +1,4 @@
-import logoDark from '@/assets/images/logo-dark.png';
+import { logoOriginal as logoDark } from '@/assets/brandAssets';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import IconifyIcon from '@/components/wrappers/IconifyIcon';
 import { Card, CardBody, Col, Form, Row, Table } from 'react-bootstrap';
