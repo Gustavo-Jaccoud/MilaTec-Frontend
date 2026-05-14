@@ -5,6 +5,7 @@ import {
   useContext,
   useCallback,
   useEffect,
+  useRef,
   useState
 } from 'react';
 import { useForm } from 'react-hook-form';
@@ -46,6 +47,30 @@ const KanbanProvider = ({ children, funnelVariant = 'none' }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const hasLoadedRef = useRef(false);
+
+  const loadProjects = async () => {
+    if (!accessToken) {
+      setError('Faça login para carregar o funil de projetos.');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    try {
+      const list = await fetchProjects(accessToken);
+      const arr = Array.isArray(list) ? list : [];
+      const mapped = mapProjectsToKanban(arr);
+      setSections(mapped.sections);
+      setTasks(mapped.tasks);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Erro ao carregar projetos');
+      setSections([]);
+      setTasks([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [activeSectionId, setActiveSectionId] = useState();
   const [activeTaskId, setActiveTaskId] = useState();
@@ -57,6 +82,7 @@ const KanbanProvider = ({ children, funnelVariant = 'none' }) => {
   });
 
   const refetchKanban = useCallback(() => {
+    hasLoadedRef.current = false;
     setReloadKey((k) => k + 1);
   }, []);
 
@@ -66,6 +92,7 @@ const KanbanProvider = ({ children, funnelVariant = 'none' }) => {
       setTasks([]);
       setLoading(false);
       setError(null);
+      hasLoadedRef.current = false;
       return;
     }
     if (!accessToken) {
@@ -75,31 +102,11 @@ const KanbanProvider = ({ children, funnelVariant = 'none' }) => {
       setError(null);
       return;
     }
-    let cancelled = false;
-    (async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const list = await fetchProjects(accessToken);
-        if (cancelled) return;
-        const arr = Array.isArray(list) ? list : [];
-        const mapped = mapProjectsToKanban(arr);
-        setSections(mapped.sections);
-        setTasks(mapped.tasks);
-      } catch (e) {
-        if (!cancelled) {
-          setError(e instanceof Error ? e.message : 'Erro ao carregar projetos');
-          setSections([]);
-          setTasks([]);
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [funnelVariant, accessToken, reloadKey]);
+    if (!hasLoadedRef.current) {
+      hasLoadedRef.current = true;
+      loadProjects();
+    }
+  }, [accessToken, funnelVariant, reloadKey]);
 
   const {
     control: newTaskControl,
