@@ -153,6 +153,7 @@ describe('LoginPinPage', () => {
     expect(await screen.findByText('Funil de Projetos')).toBeInTheDocument();
     expect(authSession.getToken()).toBe('jwt-token');
     expect(authSession.getPendingEmail()).toBe('');
+    expect(authSession.getUserEmail()).toBe(PENDING_EMAIL);
   });
 
   it('shows the backend error message and resets the fields on failure', async () => {
@@ -187,6 +188,7 @@ describe('LoginPinPage', () => {
 
     deferred.resolve({ accessToken: 'jwt-token' });
     expect(await screen.findByText('Funil de Projetos')).toBeInTheDocument();
+    expect(authSession.getUserEmail()).toBe(PENDING_EMAIL);
   });
 
   it('triggers resend, applies cooldown countdown and re-enables after timeout', async () => {

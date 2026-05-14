@@ -48,22 +48,38 @@ describe('authSession', () => {
     sessionStorage.setItem('unrelated:key', 'keep');
     authSession.setToken('jwt-token');
     authSession.setPendingEmail('user@milatec.com');
+    authSession.setUserEmail('user@milatec.com');
 
     authSession.clear();
 
     assert.equal(authSession.getToken(), '');
     assert.equal(authSession.getPendingEmail(), '');
+    assert.equal(authSession.getUserEmail(), '');
     assert.equal(sessionStorage.getItem('unrelated:key'), 'keep');
+  });
+
+  it('stores, reads and removes the session user email in sessionStorage', () => {
+    authSession.setUserEmail(' maria@milatec.com ');
+
+    assert.equal(authSession.getUserEmail(), 'maria@milatec.com');
+    assert.equal(sessionStorage.getItem(AUTH_SESSION_KEYS.userEmail), 'maria@milatec.com');
+
+    authSession.clearUserEmail();
+
+    assert.equal(authSession.getUserEmail(), '');
   });
 
   it('removes values when empty input is provided', () => {
     authSession.setToken('jwt-token');
     authSession.setPendingEmail('user@milatec.com');
+    authSession.setUserEmail('user@milatec.com');
 
     authSession.setToken('');
     authSession.setPendingEmail(null);
+    authSession.setUserEmail('');
 
     assert.equal(authSession.getToken(), '');
     assert.equal(authSession.getPendingEmail(), '');
+    assert.equal(authSession.getUserEmail(), '');
   });
 });

@@ -69,9 +69,31 @@
   }
 }
 
+.milatec-sidebar-user-wrap {
+  margin: 0 0 16px 12px;
+}
+
+.milatec-sidebar-user-dropdown {
+  .dropdown-toggle::after {
+    display: none;
+  }
+}
+
+.milatec-sidebar-user-toggle {
+  box-shadow: none;
+  line-height: 1;
+  padding: 0;
+  text-decoration: none;
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #00c853;
+  }
+}
+
 .milatec-sidebar-user-avatar {
   align-items: center;
   background: #ff6b6b;
+  border: none;
   border-radius: 50%;
   color: #fff;
   display: inline-flex;
@@ -79,6 +101,61 @@
   font-weight: 700;
   height: 26px;
   justify-content: center;
-  margin: 0 0 16px 12px;
   width: 26px;
+}
+
+.milatec-sidebar-user-menu {
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(32, 50, 76, 0.12);
+  margin-bottom: 8px !important;
+  min-width: 220px;
+  overflow: hidden;
+}
+
+.milatec-sidebar-user-panel {
+  background: #fff;
+  padding: 14px 16px 12px;
+}
+
+.milatec-sidebar-user-name {
+  color: #1a1d21;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.milatec-sidebar-user-email {
+  color: #1a1d21;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.35;
+  margin-top: 4px;
+}
+
+.milatec-sidebar-user-divider {
+  background: #e8eaed;
+  height: 1px;
+  margin: 12px 0 10px;
+}
+
+.milatec-sidebar-user-logout {
+  align-items: center;
+  border-radius: 8px;
+  color: #1a1d21 !important;
+  display: flex;
+  font-size: 13px;
+  font-weight: 400;
+  gap: 8px;
+  margin: 0 -4px;
+  padding: 8px 4px !important;
+
+  &:hover,
+  &:focus {
+    background-color: #f7f9fc !important;
+    color: #1a1d21 !important;
+  }
+}
+
+.milatec-sidebar-user-logout-icon {
+  font-size: 18px;
 }

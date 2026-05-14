@@ -188,6 +188,7 @@ const LoginPinPage = () => {
       }
 
       setAccessToken(accessToken);
+      authSession.setUserEmail(pendingEmail);
       authSession.clearPendingEmail();
       navigate('/funil-projetos', { replace: true });
     } catch (err) {

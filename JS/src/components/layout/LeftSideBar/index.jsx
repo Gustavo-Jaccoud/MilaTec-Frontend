@@ -6,6 +6,7 @@ import FallbackLoading from '@/components/FallbackLoading';
 import { getMenuItems } from '@/helpers/Manu';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import HoverMenuToggle from './components/HoverMenuToggle';
+import SidebarUserMenu from './components/SidebarUserMenu';
 // import AppMenu from './components/AppMenu'
 
 const AppMenu = lazy(() => import('./components/AppMenu'));
@@ -36,7 +37,7 @@ const LeftSideBar = () => {
 
         <div className="clearfix" />
       </SimplebarReactClient>
-      <div className="milatec-sidebar-user-avatar">M</div>
+      <SidebarUserMenu />
     </div>;
 };
 export default LeftSideBar;

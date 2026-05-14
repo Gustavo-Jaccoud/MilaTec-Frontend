@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 
 const CAMPO_ETAPA = 'Etapa do negócio';
+/** Nome exibível do orçamento (lookup/rollup); `Orçamentos` costuma vir só com ids `rec…`. */
+const CAMPO_ORCAMENTO_NOME = 'OrcamentoNome';
 
 /**
  * @param {unknown} value
@@ -78,7 +80,8 @@ export function mapProjectsToKanban(projects) {
       id: p.id,
       sectionId,
       title: toDisplayString(p.Projeto) || p.id,
-      budgetName: toDisplayString(p.Orçamentos) || '—',
+      budgetName:
+        toDisplayString(p[CAMPO_ORCAMENTO_NOME]) || toDisplayString(p.Orçamentos) || '—',
       budgetType: toDisplayString(p['Tipo de orçamento']) || '—',
       category: toDisplayString(p['Cidade da obra']) || '—',
       createdAt: formatCreatedAt(p)
