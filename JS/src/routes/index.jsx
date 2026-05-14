@@ -30,6 +30,7 @@ const TimelinePages = lazy(() => import('@/app/(admin)/pages/timeline/page'));
 const Projects = lazy(() => import('@/app/(admin)/apps/Projects/page'));
 const Kanban = lazy(() => import('@/app/(admin)/tasks/kanban/page'));
 const Obras = lazy(() => import('@/app/(admin)/apps/Obras/page'));
+const ObraDetails = lazy(() => import('@/app/(admin)/apps/Obras/obra-details/page'));
 const ViewDetails = lazy(() => import('@/app/(admin)/tasks/view-details/page'));
 const Pricing = lazy(() => import('@/app/(admin)/pages/pricing/page'));
 const ComingSoonPage = lazy(() => import('@/app/(other)/coming-soon/page'));
@@ -201,6 +202,10 @@ const appsRoutes = [{
   path: '/funil-obras',
   name: 'Funil Obras',
   element: <Obras />
+}, {
+  path: '/obras/:id',
+  name: 'Detalhe Obra',
+  element: <ObraDetails />
 }, {
   path: '/programacao-entregas',
   name: 'Programação de Entregas',

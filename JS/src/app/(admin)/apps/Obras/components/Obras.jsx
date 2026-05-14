@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/useAuthContext';
 import { fetchConstructions } from '@/services/constructionService';
 import { mapConstructionsToKanban } from '@/utils/constructionKanbanMapper';
@@ -89,8 +90,13 @@ const Obras = () => {
         {tasks
           .filter((task) => task.sectionId === section.id)
           .map((task) => (
-            <Card key={task.id} className="mb-2">
-              <ConstructionCard task={task} />
+            <Card key={task.id} className="mb-2 obra-funnel-card">
+              <Link
+                to={`/obras/${encodeURIComponent(task.id)}`}
+                className="text-decoration-none text-reset d-block obra-funnel-card-link"
+              >
+                <ConstructionCard task={task} />
+              </Link>
             </Card>
           ))}
       </div>
