@@ -6,24 +6,24 @@ import IconifyIcon from '@/components/wrappers/IconifyIcon';
  */
 const ProjectBudgetsSection = ({ details }) => {
   return (
-    <section className="project-details-section">
-      <h2 className="project-details-section__title">Orçamentos</h2>
-      
+    <section className="details-section">
+      <h2 className="details-section__title">Orçamentos</h2>
+
       {details.budgetNames && details.budgetNames.length > 0 ? (
         <Row className="g-3">
           {details.budgetNames.map((budgetName, index) => (
             <Col xs={12} key={index}>
-              <div className="project-budget-item">
-                <IconifyIcon icon="tabler:file-text" className="project-budget-item__icon" />
-                <span className="project-budget-item__name">{budgetName}</span>
+              <div className="details-budget-item">
+                <IconifyIcon icon="tabler:file-text" className="details-budget-item__icon" />
+                <span className="details-budget-item__name">{budgetName}</span>
               </div>
             </Col>
           ))}
         </Row>
       ) : (
-        <div className="project-doc-placeholder">
-          <IconifyIcon icon="tabler:file-off" className="project-doc-placeholder__icon" />
-          <span className="project-doc-placeholder__text">Sem orçamentos</span>
+        <div className="details-placeholder">
+          <IconifyIcon icon="tabler:file-off" className="details-placeholder__icon" />
+          <span className="details-placeholder__text">Sem orçamentos</span>
         </div>
       )}
     </section>

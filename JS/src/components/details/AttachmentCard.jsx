@@ -1,10 +1,17 @@
 import classNames from 'classnames';
 
 /**
- * @param {{ title: string, emptyText?: string, className?: string, children?: import('react').ReactNode }} props
+ * Reusable attachment/document card
+ * @param {{
+ *   title: string,
+ *   emptyText?: string,
+ *   children?: import('react').ReactNode,
+ *   className?: string
+ * }} props
  */
-const AttachmentBox = ({ title, emptyText = 'Sem anexos', className, children }) => {
+const AttachmentCard = ({ title, emptyText = 'Sem anexos', children, className }) => {
   const hasContent = children != null && children !== false;
+
   return (
     <div className={classNames('details-attachment-card', className)}>
       <div className="details-attachment-card__title">{title}</div>
@@ -15,4 +22,4 @@ const AttachmentBox = ({ title, emptyText = 'Sem anexos', className, children })
   );
 };
 
-export default AttachmentBox;
+export default AttachmentCard;

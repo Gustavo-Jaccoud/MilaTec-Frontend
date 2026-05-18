@@ -35,9 +35,9 @@ const ConstructionProjectsSection = ({ details }) => {
   const { totalValue, totalQty, totalWeight } = details.projectsSummary;
 
   return (
-    <section className="obra-details-section">
-      <h2 className="obra-details-section__title">Projetos</h2>
-      <div className="obra-details-projects-summary mb-3">
+    <section className="details-section">
+      <h2 className="details-section__title">Projetos</h2>
+      <div className="details-projects-summary mb-3">
         <span className="me-4">
           <strong>Valor total:</strong> {formatBRL(totalValue)}
         </span>
@@ -48,10 +48,10 @@ const ConstructionProjectsSection = ({ details }) => {
           <strong>Peso total:</strong> {formatKg(totalWeight)}
         </span>
       </div>
-      <p className="obra-details-hint text-muted small mb-3">
+      <p className="details-hint text-muted small mb-3">
         Cards de exemplo até existir endpoint de projetos por obra.
       </p>
-      <div className="obra-details-project-cards-row">
+      <div className="details-project-cards-row">
         {MOCK_PROJECT_CARDS.map((card) => (
           <ProjectMiniCard
             key={card.id}
