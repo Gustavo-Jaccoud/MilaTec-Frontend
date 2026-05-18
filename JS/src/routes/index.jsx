@@ -40,6 +40,10 @@ const Chat = lazy(() => import('@/app/(admin)/apps/chat/page'));
 
 const Calendar = lazy(() => import('@/app/(admin)/apps/calendar/page'));
 
+const ProgramacaoEntregas = lazy(() => import('@/app/(admin)/entregas/page'));
+
+const DeliveryDetails = lazy(() => import('@/app/(admin)/entregas/delivery-details/page'));
+
 const Email = lazy(() => import('@/app/(admin)/apps/email/page'));
 
 const FileManager = lazy(() => import('@/app/(admin)/apps/file-manager/page'));
@@ -430,7 +434,15 @@ const appsRoutes = [{
 
   name: 'Programação de Entregas',
 
-  element: <Kanban />
+  element: <ProgramacaoEntregas />
+
+}, {
+
+  path: '/delivery/:id',
+
+  name: 'Detalhe Entrega',
+
+  element: <DeliveryDetails />
 
 }, {
 
