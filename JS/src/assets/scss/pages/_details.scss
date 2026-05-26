@@ -5,6 +5,8 @@ $details-muted: #6c757d;
 $details-placeholder: #b0b0b0;
 $details-badge-bg: #000080;
 $details-badge-color: #fff;
+$details-soft-bg: #f8fafc;
+$details-card-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
 
 // Page
 .details-page {
@@ -16,6 +18,12 @@ $details-badge-color: #fff;
 
 .details-main {
   max-width: 100%;
+}
+
+.details-main--obra {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 // Header
@@ -80,6 +88,21 @@ $details-badge-color: #fff;
   margin-bottom: 2rem;
 }
 
+.details-section--card {
+  border: 1px solid $details-border;
+  border-radius: 18px;
+  padding: 1.25rem;
+  background: #fff;
+  box-shadow: $details-card-shadow;
+}
+
+.details-section__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
 .details-section__title {
   font-size: 1.05rem;
   font-weight: 800;
@@ -87,6 +110,21 @@ $details-badge-color: #fff;
   letter-spacing: 0.04em;
   margin-bottom: 1rem;
   color: #1a1d21;
+}
+
+.details-section__header .details-section__title {
+  margin-bottom: 0.35rem;
+}
+
+.details-section__description {
+  color: $details-muted;
+  font-size: 0.88rem;
+  margin: 0;
+  max-width: 42rem;
+}
+
+.details-section__description + .details-attachments {
+  margin-top: 1rem;
 }
 
 .details-subsection-title {
@@ -161,6 +199,10 @@ $details-badge-color: #fff;
   @media (max-width: 575.98px) {
     grid-template-columns: 1fr;
   }
+}
+
+.details-attachments--stacked {
+  grid-template-columns: 1fr;
 }
 
 .details-attachment-card {
@@ -286,6 +328,138 @@ $details-badge-color: #fff;
   background: #fafbfc;
 }
 
+// Obra highlights
+.details-highlight-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+
+  @media (max-width: 1199.98px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 575.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.details-highlight-card {
+  border: 1px solid rgba(0, 0, 128, 0.12);
+  border-radius: 16px;
+  padding: 1rem;
+  background:
+    linear-gradient(135deg, rgba(0, 0, 128, 0.08), rgba(255, 255, 255, 0) 55%),
+    $details-soft-bg;
+  min-width: 0;
+}
+
+.details-highlight-card__label,
+.details-metric-card__label {
+  display: block;
+  color: $details-muted;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+
+.details-highlight-card__value {
+  display: block;
+  color: #111827;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+// Grouped obra information
+.details-info-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+
+  @media (max-width: 767.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.details-info-group {
+  border: 1px solid $details-border;
+  border-radius: 14px;
+  padding: 1rem;
+  background: $details-soft-bg;
+  min-width: 0;
+}
+
+.details-info-group--wide {
+  grid-column: 1 / -1;
+}
+
+.details-info-group__header {
+  margin-bottom: 0.85rem;
+}
+
+.details-info-group__title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #1a1d21;
+  margin: 0 0 0.25rem;
+}
+
+.details-info-group__description {
+  color: $details-muted;
+  font-size: 0.82rem;
+  margin: 0;
+}
+
+// Metrics
+.details-metric-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.details-metric-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @media (max-width: 575.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.details-metric-grid--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  @media (max-width: 767.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.details-metric-card {
+  border: 1px solid $details-border;
+  border-radius: 14px;
+  padding: 0.85rem;
+  background: $details-soft-bg;
+  min-width: 0;
+}
+
+.details-metric-card__value {
+  display: block;
+  color: #111827;
+  font-size: 1rem;
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+.details-inline-note {
+  border: 1px dashed $details-border;
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+  background: #fff;
+  color: $details-muted;
+  font-size: 0.82rem;
+}
+
 // Projects summary
 .details-projects-summary {
   font-size: 0.92rem;
@@ -313,7 +487,7 @@ $details-badge-color: #fff;
   border: 1px solid $details-border;
   border-radius: 12px;
   padding: 0.85rem 1rem;
-  background: #fafbfc;
+  background: $details-soft-bg;
 }
 
 .details-project-mini-card__title {
@@ -341,10 +515,49 @@ $details-badge-color: #fff;
   }
 }
 
+// Delivery
+.details-delivery-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+  gap: 1rem;
+
+  @media (max-width: 991.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.details-delivery-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.details-delivery-content {
+  min-width: 0;
+}
+
+.details-deadlines-card,
+.details-records-panel {
+  border: 1px solid $details-border;
+  border-radius: 14px;
+  padding: 1rem;
+  background: $details-soft-bg;
+}
+
+.details-deadline-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+
+  @media (max-width: 575.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
 // Obra row (specific layout for obras)
 .details-obra-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 280px);
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
   gap: 1.5rem;
   align-items: start;
   margin-bottom: 0.5rem;
@@ -357,6 +570,13 @@ $details-badge-color: #fff;
 .details-obra-row__info,
 .details-obra-row__files {
   min-width: 0;
+}
+
+.details-obra-row__files {
+  @media (min-width: 992px) {
+    position: sticky;
+    top: 1rem;
+  }
 }
 
 // Print styles

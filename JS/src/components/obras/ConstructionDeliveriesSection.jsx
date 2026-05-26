@@ -1,4 +1,3 @@
-import { Col, Row } from 'react-bootstrap';
 import StatusBadge from './StatusBadge';
 import AttachmentBox from './AttachmentBox';
 import { formatBRL } from './obraDetailsFormat';
@@ -18,70 +17,58 @@ const DEADLINE_ROWS = [
  */
 const ConstructionDeliveriesSection = ({ details }) => {
   const d = details.deliveries;
+  const deliveryMetrics = [
+    { label: 'Quantidade entregue', value: String(d.delivered) },
+    { label: 'Quantidade faltante', value: String(d.remaining) },
+    { label: 'Valor entregue', value: formatBRL(d.deliveredValue) },
+    { label: 'Valor restante', value: formatBRL(d.remainingValue) },
+    { label: 'Etapa do negócio', value: details.businessStage },
+    { label: 'Endereço da entrega', value: '-' }
+  ];
 
   return (
-    <section className="details-section">
-      <h2 className="details-section__title">Entregas</h2>
-      <Row className="g-4">
-        <Col xs={12} lg={5}>
-          <div className="details-field mb-3">
+    <section className="details-section details-section--card">
+      <div className="details-section__header">
+        <div>
+          <h2 className="details-section__title">Entregas</h2>
+          <p className="details-section__description">
+            Acompanhamento do que já foi entregue, do saldo e dos prazos críticos.
+          </p>
+        </div>
+      </div>
+
+      <div className="details-delivery-layout">
+        <aside className="details-delivery-panel">
+          <div className="details-field">
             <span className="details-field__label">Resumo</span>
             <div className="details-select-like">Sem projetos</div>
           </div>
           <AttachmentBox title="Pedido de compra (anexo)" />
-        </Col>
-        <Col xs={12} lg={7}>
-          <Row className="g-3 mb-3">
-            <Col xs={12} sm={6}>
-              <div className="details-field">
-                <span className="details-field__label">Quantidade entregue</span>
-                <StatusBadge status={String(d.delivered)} badgeClass="details-status-badge" />
+        </aside>
+
+        <div className="details-delivery-content">
+          <div className="details-metric-grid details-metric-grid--two mb-3">
+            {deliveryMetrics.map((metric) => (
+              <div className="details-field details-metric-card" key={metric.label}>
+                <span className="details-field__label">{metric.label}</span>
+                <StatusBadge status={metric.value} badgeClass="details-status-badge" />
               </div>
-            </Col>
-            <Col xs={12} sm={6}>
-              <div className="details-field">
-                <span className="details-field__label">Quantidade faltante</span>
-                <StatusBadge status={String(d.remaining)} badgeClass="details-status-badge" />
-              </div>
-            </Col>
-            <Col xs={12} sm={6}>
-              <div className="details-field">
-                <span className="details-field__label">Valor entregue</span>
-                <StatusBadge status={formatBRL(d.deliveredValue)} badgeClass="details-status-badge" />
-              </div>
-            </Col>
-            <Col xs={12} sm={6}>
-              <div className="details-field">
-                <span className="details-field__label">Valor restante</span>
-                <StatusBadge status={formatBRL(d.remainingValue)} badgeClass="details-status-badge" />
-              </div>
-            </Col>
-            <Col xs={12} sm={6}>
-              <div className="details-field">
-                <span className="details-field__label">Etapa (negócio)</span>
-                <StatusBadge status={details.businessStage} badgeClass="details-status-badge" />
-              </div>
-            </Col>
-            <Col xs={12} sm={6}>
-              <div className="details-field">
-                <span className="details-field__label">Endereço da entrega</span>
-                <span className="details-field__plain">-</span>
-              </div>
-            </Col>
-          </Row>
-          <h3 className="details-subsection-title">Datas importantes</h3>
-          <Row className="g-2">
-            {DEADLINE_ROWS.map((row) => (
-              <Col xs={12} sm={6} key={row.key}>
-                <div className="details-field details-field--compact">
+            ))}
+          </div>
+
+          <div className="details-deadlines-card">
+            <h3 className="details-subsection-title">Datas importantes</h3>
+            <div className="details-deadline-grid">
+              {DEADLINE_ROWS.map((row) => (
+                <div className="details-field details-field--compact" key={row.key}>
                   <span className="details-field__label">{row.label}</span>
                   <StatusBadge status={details.deadlines[row.key]} badgeClass="details-status-badge" />
                 </div>
-              </Col>
-            ))}
-          </Row>
-        </Col>
-      </Row>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };

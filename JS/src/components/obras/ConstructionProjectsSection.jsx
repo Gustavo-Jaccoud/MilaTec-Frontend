@@ -28,29 +28,42 @@ const MOCK_PROJECT_CARDS = [
   }
 ];
 
+const SUMMARY_ITEMS = [
+  { label: 'Valor total', key: 'totalValue', format: formatBRL },
+  { label: 'Quantidade total', key: 'totalQty', format: (value) => (Number.isFinite(value) ? value : 0) },
+  { label: 'Peso total', key: 'totalWeight', format: formatKg }
+];
+
 /**
  * @param {{ details: import('@/utils/mapConstructionDetails').ConstructionDetails }} props
  */
 const ConstructionProjectsSection = ({ details }) => {
-  const { totalValue, totalQty, totalWeight } = details.projectsSummary;
-
   return (
-    <section className="details-section">
-      <h2 className="details-section__title">Projetos</h2>
-      <div className="details-projects-summary mb-3">
-        <span className="me-4">
-          <strong>Valor total:</strong> {formatBRL(totalValue)}
-        </span>
-        <span className="me-4">
-          <strong>Quantidade total:</strong> {Number.isFinite(totalQty) ? totalQty : 0}
-        </span>
-        <span>
-          <strong>Peso total:</strong> {formatKg(totalWeight)}
-        </span>
+    <section className="details-section details-section--card">
+      <div className="details-section__header">
+        <div>
+          <h2 className="details-section__title">Projetos</h2>
+          <p className="details-section__description">
+            Visão consolidada dos projetos vinculados a esta obra.
+          </p>
+        </div>
       </div>
-      <p className="details-hint text-muted small mb-3">
+
+      <div className="details-metric-grid details-metric-grid--three mb-3">
+        {SUMMARY_ITEMS.map((item) => (
+          <div className="details-metric-card" key={item.key}>
+            <span className="details-metric-card__label">{item.label}</span>
+            <strong className="details-metric-card__value">
+              {item.format(details.projectsSummary[item.key])}
+            </strong>
+          </div>
+        ))}
+      </div>
+
+      <div className="details-inline-note mb-3">
         Cards de exemplo até existir endpoint de projetos por obra.
-      </p>
+      </div>
+
       <div className="details-project-cards-row">
         {MOCK_PROJECT_CARDS.map((card) => (
           <ProjectMiniCard
