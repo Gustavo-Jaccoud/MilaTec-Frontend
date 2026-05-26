@@ -136,6 +136,18 @@ $details-badge-color: #fff;
   word-break: break-word;
 }
 
+.details-status-badge--link {
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: inherit;
+      text-decoration: underline;
+    }
+  }
+}
+
 .details-muted {
   color: $details-muted;
 }

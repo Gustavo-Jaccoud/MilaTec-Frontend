@@ -8,12 +8,6 @@ import { Link } from 'react-router-dom';
 
 import TaskItem from './TaskItem';
 
-
-
-const FILTERS = ['Etapa do negócio'];
-
-
-
 const Board = () => {
 
   const {
@@ -221,32 +215,6 @@ const Board = () => {
         <p className="project-funnel-subtitle">Acompanhe seus projetos!</p>
 
       </header>
-
-
-
-      <div className="project-funnel-filters">
-
-        {FILTERS.map((filterLabel) => (
-
-          <button
-
-            key={filterLabel}
-
-            type="button"
-
-            className="project-funnel-filter-pill"
-
-          >
-
-            {filterLabel}
-
-          </button>
-
-        ))}
-
-      </div>
-
-
 
       {readOnly ? (
 
