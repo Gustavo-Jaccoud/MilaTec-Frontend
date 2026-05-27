@@ -181,8 +181,7 @@ const LoginCodePage = () => {
         navigate(""); // colocar rota
         
       }else if (decoded.role === "user") {
-        navigate(""); // colocar rota
-     
+        navigate(""); // colocar rota     
       }else{
         navigate("/auth/login");
       }
