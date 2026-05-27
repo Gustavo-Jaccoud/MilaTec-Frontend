@@ -5,7 +5,7 @@ import IconifyIcon from '@/components/wrappers/IconifyIcon';
  */
 const ProjectWorkRecordSection = ({ details }) => {
   return (
-    <section className="details-section">
+    <section className="details-section details-section--card">
       <h2 className="details-section__title">Registro da Obra</h2>
 
       <div className="details-placeholder">

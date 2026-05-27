@@ -20,6 +20,7 @@ $details-card-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
   max-width: 100%;
 }
 
+.details-main--cards,
 .details-main--obra {
   display: flex;
   flex-direction: column;
@@ -328,7 +329,7 @@ $details-card-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
   background: #fafbfc;
 }
 
-// Obra highlights
+// Highlight cards grid
 .details-highlight-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -373,7 +374,7 @@ $details-card-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
   word-break: break-word;
 }
 
-// Grouped obra information
+// Grouped information cards
 .details-info-groups {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -554,7 +555,8 @@ $details-card-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
   }
 }
 
-// Obra row (specific layout for obras)
+// Content row (main + sidebar layout)
+.details-content-row,
 .details-obra-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
@@ -567,11 +569,14 @@ $details-card-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
   }
 }
 
+.details-content-row__main,
+.details-content-row__side,
 .details-obra-row__info,
 .details-obra-row__files {
   min-width: 0;
 }
 
+.details-content-row__side,
 .details-obra-row__files {
   @media (min-width: 992px) {
     position: sticky;

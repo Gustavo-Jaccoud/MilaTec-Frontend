@@ -6,7 +6,7 @@ import IconifyIcon from '@/components/wrappers/IconifyIcon';
  */
 const ProjectBudgetsSection = ({ details }) => {
   return (
-    <section className="details-section">
+    <section className="details-section details-section--card">
       <h2 className="details-section__title">Orçamentos</h2>
 
       {details.budgetNames && details.budgetNames.length > 0 ? (
