@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { getToken, getUserRole } from "@/app/services/auth";
+import { getToken, getUserRole } from  "@/services/auth";
 
 const PrivateRoute = ({ children, allowedRoles }) => {
   const token = getToken();

@@ -6,7 +6,7 @@ import { Card, Col, Form, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import { getLoginEmail, setToken, clearLoginEmail, setUserRole} from "@/app/services/auth";
+import { getLoginEmail, setToken, clearLoginEmail, setUserRole} from  "@/services/auth";
 
 
 const LoginCodePage = () => {
@@ -39,7 +39,7 @@ const LoginCodePage = () => {
     }
     setLoadingResend(true);
     try {
-      const response = await fetch("", { //colocar depois o endpoint referente do backend dentro das aspas duplas
+      const response = await fetch("localhost:3000/request-pin", { 
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -102,7 +102,7 @@ const LoginCodePage = () => {
       return;
     }
     if (!code) {
-      setError("Informe o código corretamente.");
+      setError("Por favor, informe o código.");
       return;
     }
 
@@ -122,7 +122,7 @@ const LoginCodePage = () => {
 
 
     try {
-    const response = await fetch("", { //colocar depois o endpoint referente do backend dentro das aspas duplas
+    const response = await fetch("localhost:3000/verify-pin", { 
     method: "POST",
     headers: {
     "Content-Type": "application/json",
@@ -178,10 +178,10 @@ const LoginCodePage = () => {
       clearLoginEmail();
 
       if (decoded.role === "admin") {
-        navigate("/admin");
+        navigate(""); // colocar rota
         
       }else if (decoded.role === "user") {
-        navigate("/dashboard");
+        navigate(""); // colocar rota
      
       }else{
         navigate("/auth/login");
@@ -214,7 +214,8 @@ const LoginCodePage = () => {
               </div>
              
              {email && (
-                <p className="fw-semibold mb-3 fs-5">
+                <p className="fw-semibold mb-3 fs-5"
+                style={{ wordBreak: "break-word" }}>
                   Enviamos um código de verificação para: {email}
                 </p>
               )}

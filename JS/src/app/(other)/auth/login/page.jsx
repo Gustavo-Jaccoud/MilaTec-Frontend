@@ -5,7 +5,7 @@ import { Card, Col, Form, Row } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import {useNavigate} from 'react-router-dom';
 import { useState } from 'react';
-import { setLoginEmail } from "@/app/services/auth";
+import { setLoginEmail } from  "@/services/auth";
 
 const LoginPage = () => {
 
@@ -56,10 +56,10 @@ const LoginPage = () => {
 
 
   try {
-    const response = await fetch("", { //colocar depois o endpoint referente do backend dentro das aspas duplas
+    const response = await fetch("http://localhost:3000/login ", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", 
       },
       body: JSON.stringify({ email: cleanEmail }),
     });
@@ -87,7 +87,7 @@ const LoginPage = () => {
 
     setLoginEmail(cleanEmail);
 
-    navigate("/auth/login-code");
+    navigate("/auth/login-code" , { replace: true });
 
 
 
@@ -114,10 +114,10 @@ const LoginPage = () => {
                 <img src={logo} alt="logo claro" style={{ width: '13rem' }} className="logo-light" />
               </div>
               <h4 className="fw-semibold mb-3 fs-18">ENTRAR</h4>
-              <Form onSubmit={handleAvancar} className="text-start mb-3">
+              <Form onSubmit={handleAvancar} noValidate className="text-start mb-3">
                 <div className="mb-3">
                   <label className="form-label" htmlFor="email">Email</label>
-                  <Form.Control type="email" id="email" name="email" placeholder="Digite seu email" required value={email} onChange={(e) => setEmail(e.target.value)}/>
+                  <Form.Control type="text" id="email" name="email" placeholder="Digite seu email" required value={email} onChange={(e) => setEmail(e.target.value)}/>
 
 
 
