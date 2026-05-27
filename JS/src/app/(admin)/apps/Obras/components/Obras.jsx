@@ -3,13 +3,16 @@ import { useAuth } from '@/context/useAuthContext';
 import { fetchConstructions } from '@/services/constructionService';
 import { mapConstructionsToKanban } from '@/utils/constructionKanbanMapper';
 import { Alert, Button, Card, Spinner } from 'react-bootstrap';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import ConstructionCard from '@/components/kanban/ConstructionCard';
+import FunnelTable from '@/components/funnel/FunnelTable';
+import ViewModeToggle from '@/components/funnel/ViewModeToggle';
 
 const Obras = () => {
   const { accessToken } = useAuth();
   const [sections, setSections] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const [viewMode, setViewMode] = useState('kanban');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const hasLoadedRef = useRef(false);
@@ -43,6 +46,16 @@ const Obras = () => {
       loadObras();
     }
   }, [accessToken]);
+
+  const tableRows = useMemo(() => {
+    const sectionTitleById = new Map(sections.map((section) => [section.id, section.title]));
+
+    return tasks.map((task) => ({
+      ...task,
+      stage: sectionTitleById.get(task.sectionId) ?? 'Sem etapa',
+      detailsPath: `/obras/${encodeURIComponent(task.id)}`
+    }));
+  }, [sections, tasks]);
 
   if (!accessToken) {
     return (
@@ -105,13 +118,25 @@ const Obras = () => {
 
   return (
     <div className="project-funnel-page">
-      <div className="kanban-board project-funnel-board">
-        {sections.map((section) => (
-          <div key={section.id} className="kanban-board-item project-stage-column">
-            {columnBody(section)}
-          </div>
-        ))}
+      <div className="project-funnel-toolbar">
+        <ViewModeToggle value={viewMode} onChange={setViewMode} />
       </div>
+
+      {viewMode === 'kanban' ? (
+        <div className="kanban-board project-funnel-board">
+          {sections.map((section) => (
+            <div key={section.id} className="kanban-board-item project-stage-column">
+              {columnBody(section)}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <Card className="mb-0">
+          <Card.Body>
+            <FunnelTable type="constructions" rows={tableRows} />
+          </Card.Body>
+        </Card>
+      )}
 
       {!loading && sections.length === 0 && (
         <p className="text-muted mt-3 mb-0">Nenhuma obra encontrada.</p>

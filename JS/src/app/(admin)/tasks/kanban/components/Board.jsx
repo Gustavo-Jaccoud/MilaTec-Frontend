@@ -1,4 +1,5 @@
 import { useKanbanContext } from '@/context/useKanbanContext';
+import { useState } from 'react';
 
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 
@@ -6,9 +7,12 @@ import { Alert, Button, Card, Spinner } from 'react-bootstrap';
 
 import { Link } from 'react-router-dom';
 
+import FunnelTable from '@/components/funnel/FunnelTable';
+import ViewModeToggle from '@/components/funnel/ViewModeToggle';
 import TaskItem from './TaskItem';
 
 const Board = () => {
+  const [viewMode, setViewMode] = useState('kanban');
 
   const {
 
@@ -28,7 +32,9 @@ const Board = () => {
 
     refetchKanban,
 
-    funnelVariant
+    funnelVariant,
+
+    tableRows
 
   } = useKanbanContext();
 
@@ -216,7 +222,23 @@ const Board = () => {
 
       </header>
 
-      {readOnly ? (
+      <div className="project-funnel-toolbar">
+        <ViewModeToggle value={viewMode} onChange={setViewMode} />
+      </div>
+
+      {viewMode === 'table' ? (
+
+        <Card className="mb-0">
+
+          <Card.Body>
+
+            <FunnelTable type="projects" rows={tableRows} />
+
+          </Card.Body>
+
+        </Card>
+
+      ) : readOnly ? (
 
         <div className="kanban-board project-funnel-board">
 

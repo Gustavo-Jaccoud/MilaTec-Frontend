@@ -28,6 +28,8 @@ const ReactTable = ({
   tableClass,
   isSearchable,
   searchBoxClass,
+  searchLabel,
+  searchPlaceholder,
   theadClass,
   isSelectable
 }) => {
@@ -67,8 +69,8 @@ const ReactTable = ({
   return <>
       {isSearchable && <div className={classNames(searchBoxClass)}>
           <span className="d-flex align-items-center">
-            Search :
-            <input value={globalFilter ?? ''} onChange={e => table.setGlobalFilter(e.target.value)} placeholder="Buscar...." className="form-control w-auto ms-1" />
+            {searchLabel ?? 'Search'} :
+            <input value={globalFilter ?? ''} onChange={e => table.setGlobalFilter(e.target.value)} placeholder={searchPlaceholder ?? 'Buscar....'} className="form-control w-auto ms-1" />
           </span>
         </div>}
       <Table responsive className={classNames("table table-centered w-100 dt-responsive nowrap dataTable no-footer dtr-inline", tableClass)} id="products-datatable" aria-describedby="products-datatable_info" style={{

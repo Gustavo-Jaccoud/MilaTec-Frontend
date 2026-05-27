@@ -12,6 +12,16 @@
     margin-bottom: 1rem;
 }
 
+.project-funnel-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+.funnel-data-table {
+    min-width: 920px;
+}
+
 .project-funnel-title {
     margin: 0;
     font-size: 1.45rem;

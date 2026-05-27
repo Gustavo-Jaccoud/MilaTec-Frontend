@@ -5,6 +5,7 @@ import {
   useContext,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState
 } from 'react';
@@ -194,6 +195,21 @@ const KanbanProvider = ({ children, funnelVariant = 'none' }) => {
     [tasks]
   );
 
+  const getSectionTitle = useCallback(
+    (id) => sections.find((section) => section.id === id)?.title ?? 'Sem etapa',
+    [sections]
+  );
+
+  const tableRows = useMemo(
+    () =>
+      tasks.map((task) => ({
+        ...task,
+        stage: getSectionTitle(task.sectionId),
+        detailsPath: `/project/${encodeURIComponent(task.id)}`
+      })),
+    [getSectionTitle, tasks]
+  );
+
   const handleNewTask = newTaskHandleSubmit((values) => {
     if (readOnly) return;
     const formData = {
@@ -374,6 +390,9 @@ const KanbanProvider = ({ children, funnelVariant = 'none' }) => {
       deleteRecord: handleDeleteSection
     },
     getAllTasksPerSection,
+    getSectionTitle,
+    tasks,
+    tableRows,
     onDragEnd,
     loading,
     error,
