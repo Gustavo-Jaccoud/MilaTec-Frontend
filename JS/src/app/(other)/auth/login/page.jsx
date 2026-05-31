@@ -74,17 +74,19 @@ const LoginPage = () => {
   return (
     <>
       <PageBreadcrumb title="Login" />
-      <div className="auth-bg d-flex min-vh-100">
+      <div className="auth-bg d-flex min-vh-100 align-items-center">
         <Row className="g-0 justify-content-center w-100 m-xxl-5 px-xxl-4 m-3">
           <Col xxl={3} lg={5} md={6}>
-            <Link to="/" className="auth-brand d-flex justify-content-center mb-2">
+            
+            
+            <Card className="overflow-hidden text-center p-xxl-4 p-3 mb-0"  style={{ boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.10)',}}>
+
+              <Link to="/" className="auth-brand d-flex justify-content-center mb-2">
               <img src={logoDark} alt="logo escuro" style={{ width: '13rem' }} className="logo-dark" />
               <img src={logo} alt="logo claro" style={{ width: '13rem' }} className="logo-light" />
-            </Link>
-            <p className="fw-semibold mb-4 text-center text-muted fs-15">Design do Painel de Administracao</p>
-            <Card className="overflow-hidden text-center p-xxl-4 p-3 mb-0">
-              <h4 className="fw-semibold mb-2 fs-18">Acesse sua conta</h4>
-              <p className="text-muted mb-4">Digite seu email para receber o PIN de acesso.</p>
+              </Link>
+              <h4 className="fw-semibold mb-2 fs-18">ENTRAR</h4>
+              
               <Form className="text-start mb-3" noValidate onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label className="form-label" htmlFor="login-email">
@@ -102,13 +104,16 @@ const LoginPage = () => {
                     placeholder="Digite seu email"
                     type="email"
                     value={email}
+                    style={{
+                    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.05)',
+                  }}
                   />
                   <Form.Control.Feedback id="login-email-error" type="invalid">
                     {emailError}
                   </Form.Control.Feedback>
                 </div>
                 <div className="d-grid">
-                  <button className="btn btn-primary fw-semibold" disabled={isSubmitting} type="submit">
+                  <button className="btn fw-semibold" style={{backgroundColor: '#050866', borderColor: '#D1D5DB', color: '#FFFFFF', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.10)', }}disabled={isSubmitting} type="submit">
                     {isSubmitting ? 'Solicitando PIN...' : 'Solicitar PIN'}
                   </button>
                 </div>
