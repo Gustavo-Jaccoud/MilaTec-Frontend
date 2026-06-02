@@ -233,17 +233,16 @@ const LoginPinPage = () => {
       <div className="auth-bg d-flex min-vh-100">
         <Row className="g-0 justify-content-center w-100 m-xxl-5 px-xxl-4 m-3">
           <Col xxl={3} lg={5} md={6}>
-            <Link to="/" className="auth-brand d-flex justify-content-center mb-2">
+           
+          
+            <Card className="overflow-hidden text-center p-xxl-4 p-3 mb-0" style={{ boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.10)',}}>
+               <Link to="/" className="auth-brand d-flex justify-content-center mb-2">
               <img src={logoDark} alt="logo escuro" height={26} className="logo-dark" />
               <img src={logo} alt="logo claro" height={26} className="logo-light" />
-            </Link>
-            <p className="fw-semibold mb-4 text-center text-muted fs-15">
-              Design do Painel de Administracao
-            </p>
-            <Card className="overflow-hidden text-center p-xxl-4 p-3 mb-0">
-              <h4 className="fw-semibold mb-2 fs-20">Login com PIN</h4>
+              </Link>
+              <h4 className="fw-semibold mb-2 fs-20">Digite o PIN</h4>
               <p className="text-muted mb-4">
-                Enviamos um PIN de {PIN_LENGTH} digitos para o seu email
+                Enviamos um PIN de {PIN_LENGTH} dígitos para o seu email
                 {pendingEmail ? (
                   <>
                     <br />
@@ -258,7 +257,7 @@ const LoginPinPage = () => {
                   className="border-0 p-0 m-0"
                 >
                   <legend className="form-label fs-14">
-                    Digite o codigo de {PIN_LENGTH} digitos
+                    Digite o código de {PIN_LENGTH} digitos
                   </legend>
                   <div className="d-flex gap-2 mt-1 mb-2" role="group" aria-label="Campos do PIN">
                     {digits.map((digit, index) => (
@@ -297,7 +296,8 @@ const LoginPinPage = () => {
                 </fieldset>
                 <div className="mb-3 d-grid">
                   <button
-                    className="btn btn-primary fw-semibold"
+                    className="btn fw-semibold"
+                    style={{backgroundColor: '#050866', borderColor: '#D1D5DB', color: '#FFFFFF', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.10)', }}
                     disabled={isSubmitting}
                     type="submit"
                   >
