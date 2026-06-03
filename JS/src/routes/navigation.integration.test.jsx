@@ -6,9 +6,9 @@ import { MemoryRouter, Route, Routes, Link } from 'react-router-dom';
 import { authSession } from '@/services/authSession';
 import { RedirectIfAuthenticated, RequireAuth } from './guards';
 
-const Dashboard = () => (
+const FunilProjetos = () => (
   <div>
-    <h2>Dashboard</h2>
+    <h2>Funil de Projetos</h2>
     <Link to="/auth/logout">Sair</Link>
   </div>
 );
@@ -29,10 +29,10 @@ const renderApp = initialPath =>
     <MemoryRouter initialEntries={[initialPath]}>
       <Routes>
         <Route
-          path="/dashboard"
+          path="/funil-projetos"
           element={
             <RequireAuth>
-              <Dashboard />
+              <FunilProjetos />
             </RequireAuth>
           }
         />
@@ -62,27 +62,27 @@ describe('Navigation guards integration', () => {
   beforeEach(() => sessionStorage.clear());
   afterEach(() => sessionStorage.clear());
 
-  it('blocks /dashboard when there is no token', () => {
-    renderApp('/dashboard');
+  it('blocks /funil-projetos when there is no token', () => {
+    renderApp('/funil-projetos');
     expect(screen.getByText('Tela de Login')).toBeInTheDocument();
   });
 
-  it('allows /dashboard when authenticated', () => {
+  it('allows /funil-projetos when authenticated', () => {
     authSession.setToken('jwt');
-    renderApp('/dashboard');
-    expect(screen.getByRole('heading', { name: 'Dashboard' })).toBeInTheDocument();
+    renderApp('/funil-projetos');
+    expect(screen.getByRole('heading', { name: 'Funil de Projetos' })).toBeInTheDocument();
   });
 
   it('redirects authenticated users away from /auth/login', () => {
     authSession.setToken('jwt');
     renderApp('/auth/login');
-    expect(screen.getByRole('heading', { name: 'Dashboard' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Funil de Projetos' })).toBeInTheDocument();
   });
 
   it('redirects authenticated users away from /auth/login-pin', () => {
     authSession.setToken('jwt');
     renderApp('/auth/login-pin');
-    expect(screen.getByRole('heading', { name: 'Dashboard' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Funil de Projetos' })).toBeInTheDocument();
   });
 
   it('allows public routes regardless of authentication state', () => {
@@ -90,13 +90,13 @@ describe('Navigation guards integration', () => {
     expect(screen.getByText('Pagina Publica')).toBeInTheDocument();
   });
 
-  it('logout clears token and blocks subsequent dashboard access', async () => {
+  it('logout clears token and blocks subsequent funil access', async () => {
     const user = userEvent.setup();
     authSession.setToken('jwt');
     authSession.setPendingEmail('user@milatec.com');
 
-    renderApp('/dashboard');
-    expect(screen.getByRole('heading', { name: 'Dashboard' })).toBeInTheDocument();
+    renderApp('/funil-projetos');
+    expect(screen.getByRole('heading', { name: 'Funil de Projetos' })).toBeInTheDocument();
 
     await user.click(screen.getByRole('link', { name: /sair/i }));
 

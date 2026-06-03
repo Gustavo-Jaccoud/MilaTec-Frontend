@@ -5,6 +5,9 @@ export const developedBy = 'Gustavo Machado Trindade';
 export const contactUs = 'gustavotrindade.dev@gmail.com';
 export const DEFAULT_PAGE_TITLE = 'Desenvolvido por Residência de Software IV - Squad 10';
 
-// Substitua o valor da URL em env pela URL do seu backend, adicione a URL de origem do servidor
+// URL do backend Nest (ex.: http://localhost:3000). Defina em `.env`: VITE_API_BASE_URL=
+export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/$/, '');
+
+/** @deprecated use API_BASE_URL */
 export const API_BASE_PATH = '';
 export const colorVariants = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark', 'purple', 'pink', 'orange', 'light', 'link'];

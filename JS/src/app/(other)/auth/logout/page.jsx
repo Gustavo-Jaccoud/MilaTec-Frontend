@@ -4,12 +4,14 @@ import { Card, Col, Row } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import { Link } from 'react-router-dom';
 import { currentYear } from '@/context/constants';
-import { authSession } from '@/services/authSession';
+import { useAuth } from '@/context/useAuthContext';
 
 const LogoutPage = () => {
+  const { logout } = useAuth();
+
   useEffect(() => {
-    authSession.clear();
-  }, []);
+    logout();
+  }, [logout]);
 
   return (
     <>

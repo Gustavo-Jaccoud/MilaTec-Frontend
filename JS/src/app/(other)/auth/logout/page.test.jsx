@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
+import { AuthProvider } from '@/context/useAuthContext';
 import { authSession } from '@/services/authSession';
 import LogoutPage from './page';
 
@@ -15,7 +16,9 @@ describe('LogoutPage', () => {
 
     render(
       <MemoryRouter>
-        <LogoutPage />
+        <AuthProvider>
+          <LogoutPage />
+        </AuthProvider>
       </MemoryRouter>,
     );
 

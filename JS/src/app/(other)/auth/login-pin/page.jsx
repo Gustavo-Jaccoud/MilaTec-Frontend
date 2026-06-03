@@ -4,6 +4,7 @@ import PageBreadcrumb from '@/components/PageBreadcrumb';
 import { currentYear } from '@/context/constants';
 import { Card, Col, Form, Row } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/useAuthContext';
 import { requestPin, verifyPin } from '@/services/authApi';
 import { authSession } from '@/services/authSession';
 
@@ -15,6 +16,7 @@ const createEmptyPin = () => Array.from({ length: PIN_LENGTH }, () => '');
 const onlyDigits = value => (value || '').replace(/\D/g, '');
 
 const LoginPinPage = () => {
+  const { setAccessToken } = useAuth();
   const navigate = useNavigate();
   const inputsRef = useRef([]);
   const [digits, setDigits] = useState(createEmptyPin);
@@ -28,7 +30,7 @@ const LoginPinPage = () => {
 
   useEffect(() => {
     if (authSession.getToken()) {
-      navigate('/dashboard', { replace: true });
+      navigate('/funil-projetos', { replace: true });
       return;
     }
 
@@ -185,9 +187,10 @@ const LoginPinPage = () => {
         throw new Error('Resposta invalida do servidor.');
       }
 
-      authSession.setToken(accessToken);
+      setAccessToken(accessToken);
+      authSession.setUserEmail(pendingEmail);
       authSession.clearPendingEmail();
-      navigate('/dashboard', { replace: true });
+      navigate('/funil-projetos', { replace: true });
     } catch (err) {
       setError(err?.message || 'Nao foi possivel validar o PIN.');
       setDigits(createEmptyPin());

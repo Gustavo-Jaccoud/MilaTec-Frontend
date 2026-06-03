@@ -1,99 +1,376 @@
-import IconifyIcon from '@/components/wrappers/IconifyIcon';
-import SimplebarReactClient from '@/components/wrappers/SimplebarReactClient';
 import { useKanbanContext } from '@/context/useKanbanContext';
+import { useState } from 'react';
+
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import {
-  Card,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-} from 'react-bootstrap';
+
+import { Alert, Button, Card, Spinner } from 'react-bootstrap';
+
+import { Link } from 'react-router-dom';
+
+import FunnelTable from '@/components/funnel/FunnelTable';
+import ViewModeToggle from '@/components/funnel/ViewModeToggle';
 import TaskItem from './TaskItem';
 
 const Board = () => {
-  const { onDragEnd, sections, getAllTasksPerSection } = useKanbanContext();
+  const [viewMode, setViewMode] = useState('kanban');
+
+  const {
+
+    onDragEnd,
+
+    sections,
+
+    getAllTasksPerSection,
+
+    loading,
+
+    error,
+
+    readOnly,
+
+    needsAuth,
+
+    refetchKanban,
+
+    funnelVariant,
+
+    tableRows
+
+  } = useKanbanContext();
+
+
+
+  const columnBody = (section) => (
+
+    <>
+
+      <div className="project-stage-header">
+
+        <span
+
+          className={`project-stage-pill ${
+
+            section.color === 'success'
+
+              ? 'project-stage-pill-success'
+
+              : 'project-stage-pill-default'
+
+          }`}
+
+        >
+
+          {section.title}
+
+        </span>
+
+      </div>
+
+
+
+      <div className="tasklist project-stage-tasklist" id={section.id}>
+
+        {getAllTasksPerSection(section.id).map((task) => (
+
+          <Card key={task.id} className="mb-2 obra-funnel-card">
+
+            <Link
+
+              to={`/project/${encodeURIComponent(task.id)}`}
+
+              className="text-decoration-none text-reset d-block obra-funnel-card-link"
+
+            >
+
+              <TaskItem task={task} />
+
+            </Link>
+
+          </Card>
+
+        ))}
+
+      </div>
+
+    </>
+
+  );
+
+
+
+  if (needsAuth) {
+
+    return (
+
+      <div className="project-funnel-page">
+
+        <header className="project-funnel-header">
+
+          <h1 className="project-funnel-title">PROJETOS</h1>
+
+          <p className="project-funnel-subtitle">Acompanhe seus projetos!</p>
+
+        </header>
+
+        <Alert variant="warning" className="mt-3">
+
+          Faça login para carregar o funil de projetos.{' '}
+
+          <Link to="/auth/login" className="alert-link fw-semibold">
+
+            Ir para o login
+
+          </Link>
+
+        </Alert>
+
+      </div>
+
+    );
+
+  }
+
+
+
+  if (funnelVariant === 'none') {
+
+    return (
+
+      <div className="project-funnel-page">
+
+        <header className="project-funnel-header">
+
+          <h1 className="project-funnel-title">PROJETOS</h1>
+
+          <p className="project-funnel-subtitle">Acompanhe seus projetos!</p>
+
+        </header>
+
+        <Alert variant="info" className="mt-3">
+
+          A integração com a API está disponível em <strong>Funil de Projetos</strong> (menu Funil de
+
+          Projetos).
+
+        </Alert>
+
+      </div>
+
+    );
+
+  }
+
+
+
+  if (loading) {
+
+    return (
+
+      <div className="project-funnel-page text-center py-5">
+
+        <Spinner animation="border" role="status" variant="primary">
+
+          <span className="visually-hidden">Carregando…</span>
+
+        </Spinner>
+
+        <p className="mt-3 text-muted mb-0">Carregando projetos…</p>
+
+      </div>
+
+    );
+
+  }
+
+
+
+  if (error) {
+
+    return (
+
+      <div className="project-funnel-page">
+
+        <Alert variant="danger" className="mt-3">
+
+          <div className="mb-2">{error}</div>
+
+          <Button variant="outline-danger" size="sm" type="button" onClick={refetchKanban}>
+
+            Tentar novamente
+
+          </Button>
+
+        </Alert>
+
+      </div>
+
+    );
+
+  }
+
+
 
   return (
-    <div className="d-flex gap-3 kanban-board">
-      <DragDropContext onDragEnd={onDragEnd}>
-        {sections.map((section) => (
-          <Droppable key={section.id} droppableId={section.id}>
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                className="kanban-board-item"
-                data-plugin="dragula"
-                data-containers='["upcoming", "in-progress", "in-review", "completed"]'
-              >
-                <div className="card">
-                  <div className="card-body">
-                    <Dropdown align={'end'} className="float-end">
-                      <DropdownToggle
-                        as={'a'}
-                        className="drop-arrow-none"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        <IconifyIcon
-                          width={16}
-                          height={16}
-                          icon="ri:more-2-fill"
-                          className="m-0 text-muted h3"
-                        />
-                      </DropdownToggle>
-                      <DropdownMenu className="dropdown-menu-end">
-                        <DropdownItem>Editar</DropdownItem>
-                        <DropdownItem>Excluir</DropdownItem>
-                        <DropdownItem>Adicionar Membros</DropdownItem>
-                        <DropdownItem>
-                          Adicionar Data de Vencimento
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
-                    <h4 className="mb-0">{section.title}</h4>
-                  </div>
-                  <SimplebarReactClient
-                    data-simplebar
-                    style={{
-                      maxHeight: 670,
-                    }}
+
+    <div className="project-funnel-page">
+
+      <header className="project-funnel-header">
+
+        <h1 className="project-funnel-title">PROJETOS</h1>
+
+        <p className="project-funnel-subtitle">Acompanhe seus projetos!</p>
+
+      </header>
+
+      <div className="project-funnel-toolbar">
+        <ViewModeToggle value={viewMode} onChange={setViewMode} />
+      </div>
+
+      {viewMode === 'table' ? (
+
+        <Card className="mb-0">
+
+          <Card.Body>
+
+            <FunnelTable type="projects" rows={tableRows} />
+
+          </Card.Body>
+
+        </Card>
+
+      ) : readOnly ? (
+
+        <div className="kanban-board project-funnel-board">
+
+          {sections.map((section) => (
+
+            <div key={section.id} className="kanban-board-item project-stage-column">
+
+              {columnBody(section)}
+
+            </div>
+
+          ))}
+
+        </div>
+
+      ) : (
+
+        <DragDropContext onDragEnd={onDragEnd}>
+
+          <div className="kanban-board project-funnel-board">
+
+            {sections.map((section) => (
+
+              <Droppable key={section.id} droppableId={section.id}>
+
+                {(provided) => (
+
+                  <div
+
+                    ref={provided.innerRef}
+
+                    {...provided.droppableProps}
+
+                    className="kanban-board-item project-stage-column"
+
                   >
-                    <div className="tasklist px-3" id={section.id}>
-                      {getAllTasksPerSection(section.id).map((task, idx) => (
-                        <Draggable
-                          key={task.id}
-                          draggableId={task.id}
-                          index={idx}
-                        >
-                          {(provided) => (
-                            <Card
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              <TaskItem task={task} />
-                            </Card>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
+
+                    <div className="project-stage-header">
+
+                      <span
+
+                        className={`project-stage-pill ${
+
+                          section.color === 'success'
+
+                            ? 'project-stage-pill-success'
+
+                            : 'project-stage-pill-default'
+
+                        }`}
+
+                      >
+
+                        {section.title}
+
+                      </span>
+
                     </div>
-                  </SimplebarReactClient>
-                  <div className="card-body">
-                    <button className="btn btn-primary w-100">
-                      <IconifyIcon icon="ri:add-line" /> Adicionar Novo
-                    </button>
+
+                    <div className="tasklist project-stage-tasklist" id={section.id}>
+
+                      {getAllTasksPerSection(section.id).map((task, idx) => (
+
+                        <Draggable key={task.id} draggableId={task.id} index={idx}>
+
+                          {(dragProvided) => (
+
+                            <Card
+
+                              ref={dragProvided.innerRef}
+
+                              {...dragProvided.draggableProps}
+
+                              {...dragProvided.dragHandleProps}
+
+                              className="mb-2 obra-funnel-card"
+
+                            >
+
+                              <Link
+
+                                to={`/project/${encodeURIComponent(task.id)}`}
+
+                                className="text-decoration-none text-reset d-block obra-funnel-card-link"
+
+                              >
+
+                                <TaskItem task={task} />
+
+                              </Link>
+
+                            </Card>
+
+                          )}
+
+                        </Draggable>
+
+                      ))}
+
+                      {provided.placeholder}
+
+                    </div>
+
                   </div>
-                </div>
-              </div>
-            )}
-          </Droppable>
-        ))}
-      </DragDropContext>
+
+                )}
+
+              </Droppable>
+
+            ))}
+
+          </div>
+
+        </DragDropContext>
+
+      )}
+
+
+
+      {funnelVariant === 'projects-api' && !loading && sections.length === 0 && (
+
+        <p className="text-muted mt-3 mb-0">Nenhum projeto encontrado.</p>
+
+      )}
+
     </div>
+
   );
+
 };
 
+
+
 export default Board;
+

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { DEFAULT_PAGE_TITLE } from '@/context/constants';
+import { AuthProvider } from '@/context/useAuthContext';
 import { ChatProvider } from '@/context/useChatContext';
 import { LayoutProvider } from '@/context/useLayoutContext';
 // import { SessionProvider } from 'next-auth/react'
@@ -29,6 +30,7 @@ const AppProvidersWrapper = ({
   }, []);
   return (
     // <SessionProvider>
+    <AuthProvider>
     <LayoutProvider>
         <ChatProvider>
           {/* <TitleProvider> */}
@@ -39,6 +41,7 @@ const AppProvidersWrapper = ({
           {/* </TitleProvider> */}
         </ChatProvider>
       </LayoutProvider>
+    </AuthProvider>
     //  </SessionProvider>
   );
 };

@@ -8,7 +8,6 @@ const LeftSideBarToggle = () => {
   const {
     mainMenu,
     changeMainMenuSize,
-    toggleBackdrop,
     orientation,
     horizontalMenu
   } = useLayoutContext();
@@ -16,19 +15,10 @@ const LeftSideBarToggle = () => {
     width
   } = useViewPort();
   const handleMenuSize = () => {
-    if (mainMenu.size === 'full') toggleBackdrop();
-    if (mainMenu.size === 'condensed') changeMainMenuSize('default');
-    if (mainMenu.size === 'fullscreen') changeMainMenuSize('default');
-    if (mainMenu.size === 'compact') changeMainMenuSize('condensed');else if (mainMenu.size === 'default') changeMainMenuSize('condensed');
+    if (mainMenu.size !== 'default') changeMainMenuSize('default');
   };
   const resize = useCallback(debounce(() => {
-    if (width <= 768) {
-      if (mainMenu.size !== 'full') changeMainMenuSize('full');
-    } else if (width <= 1140) {
-      if (mainMenu.size !== 'condensed') changeMainMenuSize('condensed');
-    } else {
-      if (mainMenu.size !== 'default') changeMainMenuSize('default');
-    }
+    if (mainMenu.size !== 'default') changeMainMenuSize('default');
   }, 500), [width]);
   useEffect(() => {
     resize();

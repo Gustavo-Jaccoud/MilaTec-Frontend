@@ -17,7 +17,7 @@ const renderLogin = () =>
       <Routes>
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/auth/login-pin" element={<div>Tela de PIN</div>} />
-        <Route path="/dashboard" element={<div>Dashboard</div>} />
+        <Route path="/funil-projetos" element={<div>Funil de Projetos</div>} />
       </Routes>
     </MemoryRouter>,
   );
@@ -109,12 +109,12 @@ describe('LoginPage', () => {
     expect(authSession.getPendingEmail()).toBe('usuario@milatec.com');
   });
 
-  it('redirects authenticated users to the dashboard', async () => {
+  it('redirects authenticated users to the funil de projetos', async () => {
     authSession.setToken('jwt-token');
 
     renderLogin();
 
-    expect(await screen.findByText('Dashboard')).toBeInTheDocument();
+    expect(await screen.findByText('Funil de Projetos')).toBeInTheDocument();
   });
 });
 

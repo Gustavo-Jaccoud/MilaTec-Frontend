@@ -1,6 +1,10 @@
-import { HORIZONTAL_MENU_ITEM, MENU_ITEMS } from '@/assets/data/menu-items';
+import {
+  FUNNEL_MENU_ITEMS,
+  HORIZONTAL_MENU_ITEM,
+  MENU_ITEMS,
+} from '@/assets/data/menu-items';
 export const getMenuItems = () => {
-  return MENU_ITEMS;
+  return FUNNEL_MENU_ITEMS?.length ? FUNNEL_MENU_ITEMS : MENU_ITEMS;
 };
 export const getHorizontalMenuItems = () => {
   return HORIZONTAL_MENU_ITEM;

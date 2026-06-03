@@ -1,10 +1,23 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { createContext, startTransition, useContext, useCallback, useMemo, useState } from 'react';
+import {
+  createContext,
+  startTransition,
+  useContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import avatar1 from '@/assets/images/users/avatar-1.jpg';
-import { kanbanSectionsData, kanbanTasksData } from '@/assets/data/apps';
+import { useAuth } from '@/context/useAuthContext';
+import { fetchProjects } from '@/services/projectService';
+import { mapProjectsToKanban } from '@/utils/projectKanbanMapper';
+
 const ThemeContext = createContext(undefined);
+
 export const kanbanTaskSchema = yup.object({
   title: yup.string().required('Insira o título do projeto'),
   description: yup.string().required('Por favor insira a descrição do projeto'),
@@ -13,6 +26,7 @@ export const kanbanTaskSchema = yup.object({
 export const kanbanSectionSchema = yup.object({
   sectionTitle: yup.string().required('O título da seção é obrigatório')
 });
+
 const useKanbanContext = () => {
   const context = useContext(ThemeContext);
   if (!context) {
@@ -20,11 +34,45 @@ const useKanbanContext = () => {
   }
   return context;
 };
-const KanbanProvider = ({
-  children
-}) => {
-  const [sections, setSections] = useState(kanbanSectionsData);
-  const [tasks, setTasks] = useState(kanbanTasksData);
+
+/**
+ * @param {{ children: import('react').ReactNode, funnelVariant?: 'projects-api' | 'none' }} props
+ */
+const KanbanProvider = ({ children, funnelVariant = 'none' }) => {
+  const { accessToken } = useAuth();
+  const readOnly = funnelVariant === 'projects-api' || funnelVariant === 'none';
+  const needsAuth = funnelVariant === 'projects-api' && !accessToken;
+
+  const [sections, setSections] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [reloadKey, setReloadKey] = useState(0);
+  const hasLoadedRef = useRef(false);
+
+  const loadProjects = async () => {
+    if (!accessToken) {
+      setError('Faça login para carregar o funil de projetos.');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    try {
+      const list = await fetchProjects(accessToken);
+      const arr = Array.isArray(list) ? list : [];
+      const mapped = mapProjectsToKanban(arr);
+      setSections(mapped.sections);
+      setTasks(mapped.tasks);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Erro ao carregar projetos');
+      setSections([]);
+      setTasks([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const [activeSectionId, setActiveSectionId] = useState();
   const [activeTaskId, setActiveTaskId] = useState();
   const [taskFormData, setTaskFormData] = useState();
@@ -33,6 +81,34 @@ const KanbanProvider = ({
     showNewTaskModal: false,
     showSectionModal: false
   });
+
+  const refetchKanban = useCallback(() => {
+    hasLoadedRef.current = false;
+    setReloadKey((k) => k + 1);
+  }, []);
+
+  useEffect(() => {
+    if (funnelVariant !== 'projects-api') {
+      setSections([]);
+      setTasks([]);
+      setLoading(false);
+      setError(null);
+      hasLoadedRef.current = false;
+      return;
+    }
+    if (!accessToken) {
+      setSections([]);
+      setTasks([]);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+    if (!hasLoadedRef.current) {
+      hasLoadedRef.current = true;
+      loadProjects();
+    }
+  }, [accessToken, funnelVariant, reloadKey]);
+
   const {
     control: newTaskControl,
     handleSubmit: newTaskHandleSubmit,
@@ -47,31 +123,30 @@ const KanbanProvider = ({
   } = useForm({
     resolver: yupResolver(kanbanSectionSchema)
   });
+
   const emptySectionForm = useCallback(() => {
     sectionReset({
       sectionTitle: ''
     });
-  }, []);
+  }, [sectionReset]);
+
   const emptyTaskForm = useCallback(() => {
     newTaskReset({
       title: undefined,
       description: undefined,
-      // priority: undefined,
-      // tags: undefined,
       totalTasks: undefined
     });
-  }, []);
+  }, [newTaskReset]);
+
   const toggleNewTaskModal = (sectionId, taskId) => {
+    if (readOnly) return;
     if (sectionId) setActiveSectionId(sectionId);
     if (taskId) {
-      const foundTask = tasks.find(task => task.id === taskId);
+      const foundTask = tasks.find((task) => task.id === taskId);
       if (foundTask) {
         newTaskReset({
           title: foundTask.title,
           description: foundTask.description
-          // priority: foundTask.priority,
-          // totalTasks: foundTask.totalTasks,
-          // tags: foundTask.tags ? foundTask.tags[0] : 'API',
         });
         startTransition(() => {
           setActiveTaskId(taskId);
@@ -89,9 +164,11 @@ const KanbanProvider = ({
       });
     });
   };
-  const toggleSectionModal = sectionId => {
+
+  const toggleSectionModal = (sectionId) => {
+    if (readOnly) return;
     if (sectionId) {
-      const foundSection = sections.find(section => section.id === sectionId);
+      const foundSection = sections.find((section) => section.id === sectionId);
       if (foundSection) {
         startTransition(() => {
           setSectionFormData(foundSection);
@@ -112,33 +189,52 @@ const KanbanProvider = ({
       });
     });
   };
-  const getAllTasksPerSection = useCallback(id => {
-    return tasks.filter(task => task.sectionId == id);
-  }, [tasks]);
-  const handleNewTask = newTaskHandleSubmit(values => {
+
+  const getAllTasksPerSection = useCallback(
+    (id) => tasks.filter((task) => task.sectionId == id),
+    [tasks]
+  );
+
+  const getSectionTitle = useCallback(
+    (id) => sections.find((section) => section.id === id)?.title ?? 'Sem etapa',
+    [sections]
+  );
+
+  const tableRows = useMemo(
+    () =>
+      tasks.map((task) => ({
+        ...task,
+        stage: getSectionTitle(task.sectionId),
+        detailsPath: `/project/${encodeURIComponent(task.id)}`
+      })),
+    [getSectionTitle, tasks]
+  );
+
+  const handleNewTask = newTaskHandleSubmit((values) => {
+    if (readOnly) return;
     const formData = {
       title: values.title,
       description: values.description,
-      // priority: values.priority,
-      // tags: values.tags,
       totalTasks: values.totalTasks
     };
     if (activeSectionId) {
-      const newTask = {
-        ...formData,
-        priority: 'High',
-        // tags: [formData.tags],
-        title: '',
-        sectionId: activeSectionId,
-        id: Number(tasks.slice(-1)[0].id) + 1 + '',
-        views: 0,
-        members: [avatar1],
-        share: 10,
-        variant: 'success',
-        // completedTasks: 0,
-        commentsCount: 0
-      };
-      setTasks([...tasks, newTask]);
+      setTasks((prev) => {
+        const last = prev.slice(-1)[0];
+        const nextId = last && !Number.isNaN(Number(last.id)) ? `${Number(last.id) + 1}` : `local-${Date.now()}`;
+        const newTask = {
+          ...formData,
+          priority: 'High',
+          title: '',
+          sectionId: activeSectionId,
+          id: nextId,
+          views: 0,
+          members: [avatar1],
+          share: 10,
+          variant: 'success',
+          commentsCount: 0
+        };
+        return [...prev, newTask];
+      });
     }
     startTransition(() => {
       toggleNewTaskModal();
@@ -146,30 +242,33 @@ const KanbanProvider = ({
     setActiveSectionId(undefined);
     newTaskReset();
   });
-  const handleEditTask = newTaskHandleSubmit(values => {
+
+  const handleEditTask = newTaskHandleSubmit((values) => {
+    if (readOnly) return;
     const formData = {
       title: values.title,
       description: values.description,
-      // priority: values.priority,
-      // tags: values.tags,
       totalTasks: values.totalTasks
     };
     if (activeSectionId && activeTaskId) {
-      const newTask = {
-        ...formData,
-        views: 0,
-        title: '',
-        priority: 'High',
-        members: [avatar1],
-        share: 10,
-        variant: 'success',
-        // tags: [formData.tags],
-        sectionId: activeSectionId,
-        id: activeTaskId,
-        // completedTasks: 0,
-        commentsCount: 0
-      };
-      setTasks(tasks.map(t => t.id === activeTaskId ? newTask : t));
+      setTasks((prev) =>
+        prev.map((t) =>
+          t.id === activeTaskId
+            ? {
+                ...formData,
+                views: 0,
+                title: '',
+                priority: 'High',
+                members: [avatar1],
+                share: 10,
+                variant: 'success',
+                sectionId: activeSectionId,
+                id: activeTaskId,
+                commentsCount: 0
+              }
+            : t
+        )
+      );
     }
     startTransition(() => {
       toggleNewTaskModal();
@@ -184,72 +283,88 @@ const KanbanProvider = ({
       setTaskFormData(undefined);
     });
   });
-  const handleDeleteTask = taskId => {
-    setTasks(tasks.filter(task => task.id !== taskId));
-  };
-  const onDragEnd = result => {
-    const {
-      source,
-      destination
-    } = result;
-    if (!destination) {
-      return;
-    }
-    let sourceOccurrence = source.index;
-    let destinationOccurrence = destination.index;
-    let sourceId = 0,
-      destinationId = 0;
-    tasks.forEach((task, index) => {
-      if (task.sectionId == source.droppableId) {
-        if (sourceOccurrence == 0) {
-          sourceId = index;
-        }
-        sourceOccurrence--;
+
+  const handleDeleteTask = useCallback(
+    (taskId) => {
+      if (readOnly) return;
+      setTasks((prev) => prev.filter((task) => task.id !== taskId));
+    },
+    [readOnly]
+  );
+
+  const onDragEnd = useCallback(
+    (result) => {
+      if (readOnly) return;
+      const { source, destination } = result;
+      if (!destination) {
+        return;
       }
-      if (task.sectionId == destination.droppableId) {
-        if (destinationOccurrence == 0) {
-          destinationId = index;
-        }
-        destinationOccurrence--;
-      }
+      setTasks((prev) => {
+        let sourceOccurrence = source.index;
+        let destinationOccurrence = destination.index;
+        let sourceId = 0;
+        let destinationId = 0;
+        prev.forEach((task, index) => {
+          if (task.sectionId == source.droppableId) {
+            if (sourceOccurrence == 0) {
+              sourceId = index;
+            }
+            sourceOccurrence--;
+          }
+          if (task.sectionId == destination.droppableId) {
+            if (destinationOccurrence == 0) {
+              destinationId = index;
+            }
+            destinationOccurrence--;
+          }
+        });
+        const task = prev[sourceId];
+        const newTasks = prev.filter((t) => t.id != task.id);
+        const moved = { ...task, sectionId: destination.droppableId };
+        const parity = destination.droppableId != source.droppableId ? -1 : 0;
+        return [...newTasks.slice(0, destinationId + parity), moved, ...newTasks.slice(destinationId + parity)];
+      });
+    },
+    [readOnly]
+  );
+
+  const handleNewSection = sectionHandleSubmit((values) => {
+    if (readOnly) return;
+    setSections((prev) => {
+      const last = prev.slice(-1)[0];
+      const nextId = last && !Number.isNaN(Number(last.id)) ? `${Number(last.id) + 1}` : `local-${Date.now()}`;
+      return [...prev, { id: nextId, title: values.sectionTitle }];
     });
-    const task = tasks[sourceId];
-    const newTasks = tasks.filter(t => t.id != task.id);
-    task.sectionId = destination.droppableId;
-    const parity = destination.droppableId != source.droppableId ? -1 : 0;
-    setTasks([...newTasks.slice(0, destinationId + parity), task, ...newTasks.slice(destinationId + parity)]);
-  };
-  const handleNewSection = sectionHandleSubmit(values => {
-    const section = {
-      // TODO test, test when array is empty
-      id: Number(sections.slice(-1)[0].id) + 1 + '',
-      title: values.sectionTitle
-    };
-    setSections([...sections, section]);
     startTransition(() => {
       toggleSectionModal();
     });
     sectionReset();
   });
-  const handleEditSection = sectionHandleSubmit(values => {
+
+  const handleEditSection = sectionHandleSubmit((values) => {
+    if (readOnly) return;
     if (activeSectionId) {
-      const newSection = {
-        id: activeSectionId,
-        title: values.sectionTitle
-      };
-      setSections(sections.map(section => {
-        return section.id === activeSectionId ? newSection : section;
-      }));
+      setSections((prev) =>
+        prev.map((section) =>
+          section.id === activeSectionId ? { id: activeSectionId, title: values.sectionTitle } : section
+        )
+      );
     }
     startTransition(() => {
       toggleSectionModal();
     });
     sectionReset();
   });
-  const handleDeleteSection = sectionId => {
-    setSections(sections.filter(section => section.id !== sectionId));
-  };
-  return <ThemeContext.Provider value={useMemo(() => ({
+
+  const handleDeleteSection = useCallback(
+    (sectionId) => {
+      if (readOnly) return;
+      setSections((prev) => prev.filter((section) => section.id !== sectionId));
+    },
+    [readOnly]
+  );
+
+  const value = {
     sections,
     activeSectionId,
     taskFormData,
@@ -275,9 +390,19 @@ const KanbanProvider = ({
       deleteRecord: handleDeleteSection
     },
     getAllTasksPerSection,
-    onDragEnd
-  }), [sections, tasks, activeSectionId, taskFormData, sectionFormData, dialogStates])}>
-      {children}
-    </ThemeContext.Provider>;
+    getSectionTitle,
+    tasks,
+    tableRows,
+    onDragEnd,
+    loading,
+    error,
+    readOnly,
+    needsAuth,
+    refetchKanban,
+    funnelVariant
+  };
+
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 };
+
 export { KanbanProvider, useKanbanContext };

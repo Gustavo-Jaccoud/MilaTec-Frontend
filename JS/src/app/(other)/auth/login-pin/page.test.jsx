@@ -3,6 +3,7 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from '@/context/useAuthContext';
 import { authSession } from '@/services/authSession';
 import LoginPinPage, { PIN_LENGTH, RESEND_COOLDOWN_SECONDS } from './page';
 import { requestPin, verifyPin } from '@/services/authApi';
@@ -17,11 +18,13 @@ const PENDING_EMAIL = 'usuario@milatec.com';
 const renderPin = () =>
   render(
     <MemoryRouter initialEntries={['/auth/login-pin']}>
-      <Routes>
-        <Route path="/auth/login" element={<div>Tela de Login</div>} />
-        <Route path="/auth/login-pin" element={<LoginPinPage />} />
-        <Route path="/dashboard" element={<div>Dashboard</div>} />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/auth/login" element={<div>Tela de Login</div>} />
+          <Route path="/auth/login-pin" element={<LoginPinPage />} />
+          <Route path="/funil-projetos" element={<div>Funil de Projetos</div>} />
+        </Routes>
+      </AuthProvider>
     </MemoryRouter>,
   );
 
@@ -68,10 +71,10 @@ describe('LoginPinPage', () => {
     expect(await screen.findByText('Tela de Login')).toBeInTheDocument();
   });
 
-  it('redirects to dashboard when there is already a token', async () => {
+  it('redirects to funil de projetos when there is already a token', async () => {
     authSession.setToken('existing-token');
     renderPin();
-    expect(await screen.findByText('Dashboard')).toBeInTheDocument();
+    expect(await screen.findByText('Funil de Projetos')).toBeInTheDocument();
   });
 
   it('accepts only digits and advances focus while typing', async () => {
@@ -136,7 +139,7 @@ describe('LoginPinPage', () => {
     expect(verifyPin).not.toHaveBeenCalled();
   });
 
-  it('verifies PIN, stores the JWT and redirects to dashboard on success', async () => {
+  it('verifies PIN, stores the JWT and redirects to funil de projetos on success', async () => {
     const user = userEvent.setup();
     verifyPin.mockResolvedValue({ accessToken: 'jwt-token' });
     renderPin();
@@ -147,9 +150,10 @@ describe('LoginPinPage', () => {
     await user.click(screen.getByRole('button', { name: /continuar/i }));
 
     await waitFor(() => expect(verifyPin).toHaveBeenCalledWith(PENDING_EMAIL, '1234'));
-    expect(await screen.findByText('Dashboard')).toBeInTheDocument();
+    expect(await screen.findByText('Funil de Projetos')).toBeInTheDocument();
     expect(authSession.getToken()).toBe('jwt-token');
     expect(authSession.getPendingEmail()).toBe('');
+    expect(authSession.getUserEmail()).toBe(PENDING_EMAIL);
   });
 
   it('shows the backend error message and resets the fields on failure', async () => {
@@ -183,7 +187,8 @@ describe('LoginPinPage', () => {
     expect(verifyPin).toHaveBeenCalledTimes(1);
 
     deferred.resolve({ accessToken: 'jwt-token' });
-    expect(await screen.findByText('Dashboard')).toBeInTheDocument();
+    expect(await screen.findByText('Funil de Projetos')).toBeInTheDocument();
+    expect(authSession.getUserEmail()).toBe(PENDING_EMAIL);
   });
 
   it('triggers resend, applies cooldown countdown and re-enables after timeout', async () => {
