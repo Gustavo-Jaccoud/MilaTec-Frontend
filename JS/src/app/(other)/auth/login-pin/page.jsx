@@ -245,7 +245,7 @@ const LoginPinPage = () => {
               </Link>
               <h4 className="fw-semibold mb-2 fs-20">Digite o PIN</h4>
               <p className="text-muted mb-4">
-                Enviamos um PIN de {PIN_LENGTH} dígitos para o seu email
+                Enviamos um PIN de {PIN_LENGTH} digitos para o seu email
                 {pendingEmail ? (
                   <>
                     <br />
@@ -260,7 +260,7 @@ const LoginPinPage = () => {
                   className="border-0 p-0 m-0"
                 >
                   <legend className="form-label fs-14">
-                    Digite o código de {PIN_LENGTH} digitos
+                    Digite o codigo de {PIN_LENGTH} digitos
                   </legend>
                   <div className="d-flex gap-2 mt-1 mb-2" role="group" aria-label="Campos do PIN">
                     {digits.map((digit, index) => (
